@@ -9,7 +9,7 @@
         {% for module in module_row %}
         {% if module in modulelist %}
         <div class="column" id="module_list_col">
-            <a href="">
+            <a href="/manage_module">
                 <img class="responsive" src={{url_for('static', filename='froggif.gif')}} alt="{{ module }} link"  width=300/>
             </a>
         module #{{ module }}

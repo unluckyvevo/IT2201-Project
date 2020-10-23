@@ -3,25 +3,37 @@ from readbit import app, db, bcrypt
 from readbit.forms import LoginForm
 from readbit.models import User
 from flask_login import login_user, current_user, logout_user, login_required
+import typing
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
+
 def login():
+
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard')) if current_user.type == 'student' else redirect(url_for('module_list'))
+        if current_user.type == 'student':
+            return redirect(url_for('dashboard'))
+        return redirect(url_for('module_list'))
+        
     form = LoginForm()
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
+
             if next_page:
                 return redirect(url_for(next_page[1:]))
+
             else:
                 return redirect(url_for('dashboard')) if current_user.type == 'student' else redirect(
                     url_for('module_list'))
+
         else:
             flash(f'Login Unsuccessful. Please check email and password', 'danger')
+
     return render_template('login.html', title='Login', form=form)
 
 @app.route('/dashboard')
@@ -30,17 +42,31 @@ def dashboard():
 
 @app.route('/module_list')
 def module_list():
-    modulelist = [1,2,3,4,5,6,7]
+    """
+    Added by Dylan Woo
+    Student cannot manage modules
+    """
+    if current_user.type == 'student':
+        return redirect("/dashboard")
+        
+    modulelist: typing.List[int] = [1,2,3,4,5,6,7]
     return render_template('module_list.html', title='Module List', modulelist=modulelist)
 
 @app.route('/class_dashboard')
 def class_dashboard():
-    classlist = [1,2,3,4,5,6]
+    classlist: typing.List[int] = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
 @app.route('/manage_class')
 def manage_clas():
-    teaching_classlist = ['T1','T2','T3','T4','T5', 'T6']
+    """
+    Added by Dylan Woo
+    Student cannot manage modules
+    """
+    if current_user.type == 'student':
+        return redirect("/dashboard")
+
+    teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
     return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
 
 @app.route('/logout')
@@ -52,3 +78,27 @@ def logout():
 @login_required
 def account():
     return render_template('account.html', title='Account')
+
+"""
+Added by Dylan Woo
+"""
+@app.route('/manage_module')
+def manage_module():
+    """
+        Student cannot manage modules
+    """
+    if current_user.type == 'student':
+            return redirect("/dashboard")
+
+    assessments: typing.List[typing.Dict] = [{
+        "Quiz 1": {
+            "Weightage": "5%",
+            "Date": "20/10/2020"
+        },
+
+        "Quiz 2": {
+            "Weightage": "5%",
+            "Date": "20/10/2020"
+        }
+    }]
+    return render_template('manage_module.html', title='Manage Module', assessments=assessments)

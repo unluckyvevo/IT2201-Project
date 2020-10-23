@@ -4,6 +4,10 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 app = Flask(__name__)
+"""
+    Not secure to store secret_key in plaintext
+    Especially on a public Github Repo 😂😂 
+"""
 app.config['SECRET_KEY'] = 'd3b96f08c6ad3188e10e7bb445b59258'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)

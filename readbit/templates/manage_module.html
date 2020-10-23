@@ -1,0 +1,45 @@
+{# 
+    Added by Dylan Woo
+#}
+
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_class.css') }}">
+
+<h1>Manage Module</h1>
+<div class="container">
+    <div class="row" id="manage_class_row2">
+        <a href="/class_dashboard" class="btn btn-info">View Class List</a>
+        <a id="add_student_btn" href="/add_assessment" class="btn btn-info">+</a>
+    </div>
+    <div class="row">
+        <table id="class_list_table" class="table table-striped table-bordered table-sm " width="100%">
+          <thead>
+            <tr>
+              <th class="th-sm">Assessment</th>
+              <th class="th-sm">Weightage</th>
+              <th class="th-sm">Date</th>
+              <th class="th-sm">View</th>
+              <th class="th-sm">Add Marks</th>
+              <th class="th-sm">Feedback</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for assessment in assessments %}
+            {% for a in assessment %}
+                <tr>
+                    <td>{{ a }}</td>
+                    <td>5%</td>
+                    <td>12/10/2020</td>
+                    <td><a href="" class="btn btn-info">View</a></td>
+                    <td><a href="" class="btn btn-info">Add Marks</a></td>
+                    <td><a href="" class="btn btn-info">Feedback</a></td>
+                </tr>
+            {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
