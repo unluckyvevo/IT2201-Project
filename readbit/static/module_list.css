@@ -15,10 +15,25 @@
 #class_list_row
 {
     text-align: center;
+
 }
 
 #class_dashboard_col
 {
     width: 20%;
 }
-
+#class_tank_row
+{
+    align-items: flex-end;
+}
+#student_frog
+{
+    position:absolute;
+    padding-bottom: 5px;
+    height: auto;
+    width:2.5%
+}
+.responsive {
+  width: 100%;
+  height: auto;
+}

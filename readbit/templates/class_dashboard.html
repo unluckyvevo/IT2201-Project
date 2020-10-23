@@ -9,8 +9,9 @@
         {% for student in class_row %}
         {% if student in classlist %}
          <div class="column" id="class_dashboard_col">
-            <div class="row justify-content-center">
-                <img src={{url_for('static', filename='student_tank.png')}} alt="{{ student }}"  width=200/>
+            <div class="row justify-content-center" id="class_tank_row">
+                <img class="responsive" src={{url_for('static', filename='student_tank.png')}} alt="{{ student }}"  width=200/>
+                <img id="student_frog" src={{url_for('static', filename='frogexample.png')}} alt="{{ student }}"  width=30/>
             </div>
             <div class="row justify-content-center">
                 #{{ student }}
