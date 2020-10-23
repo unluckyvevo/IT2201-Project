@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='module_list.css') }}">
+<h1>Class Dashboard</h1>
+<div class="container">
+
+    {% for class_row in classlist | batch(5, 'xxxx') %}
+    <div class="row" id="class_list_row">
+        {% for student in class_row %}
+        {% if student in classlist %}
+         <div class="column" id="class_dashboard_col">
+            <div class="row justify-content-center">
+                <img src={{url_for('static', filename='student_tank.png')}} alt="{{ student }}"  width=200/>
+            </div>
+            <div class="row justify-content-center">
+                #{{ student }}
+            </div>
+
+        </div>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+
+
+
+</div>
+
+{% endblock content %}

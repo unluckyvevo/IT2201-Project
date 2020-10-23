@@ -5,14 +5,16 @@
 <div class="container">
 
     {% for module_row in modulelist | batch(3, '&nbsp;') %}
-    <div class="row">
+    <div class="row" id="module_list_row">
         {% for module in module_row %}
-        <div class="column">module #{{ module }}
+        {% if module in modulelist %}
+        <div class="column" id="module_list_col">
             <a href="">
                 <img src={{url_for('static', filename='froggif.gif')}} alt="{{ module }} link"  width=300/>
             </a>
-
+        module #{{ module }}
         </div>
+        {% endif %}
         {% endfor %}
     </div>
     {% endfor %}

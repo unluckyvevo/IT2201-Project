@@ -1,7 +1,24 @@
 .column{
-    width: 33.33%;
     padding: 20px;
-    border-style: dashed;
-    border-width: thin;
+}
+
+#module_list_col
+{
+     width: 33.33%;
+}
+
+#module_list_row
+{
     text-align: center;
 }
+
+#class_list_row
+{
+    text-align: center;
+}
+
+#class_dashboard_col
+{
+    width: 20%;
+}
+

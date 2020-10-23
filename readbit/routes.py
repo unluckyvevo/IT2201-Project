@@ -30,8 +30,13 @@ def dashboard():
 
 @app.route('/module_list')
 def module_list():
-    modulelist = [1,2,3,4,5,6]
+    modulelist = [1,2,3,4,5,6,7]
     return render_template('module_list.html', title='Module List', modulelist=modulelist)
+
+@app.route('/class_dashboard')
+def class_dashboard():
+    classlist = [1,2,3,4,5,6]
+    return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
 @app.route('/logout')
 def logout():
