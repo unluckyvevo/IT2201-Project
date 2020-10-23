@@ -1,0 +1,7 @@
+.column{
+    width: 33.33%;
+    padding: 20px;
+    border-style: dashed;
+    border-width: thin;
+    text-align: center;
+}

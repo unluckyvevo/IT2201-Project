@@ -1,4 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Module List</h1>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='module_list.css') }}">
+<h1>Module List</h1>
+<div class="container">
+
+    {% for module_row in modulelist | batch(3, '&nbsp;') %}
+    <div class="row">
+        {% for module in module_row %}
+        <div class="column">module #{{ module }}
+            <a href="">
+                <img src={{url_for('static', filename='froggif.gif')}} alt="{{ module }} link"  width=300/>
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+
+
+
+</div>
+
 {% endblock content %}
