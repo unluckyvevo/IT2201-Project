@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_class.css') }}">
+
+<h1>Class List</h1>
+<div class="container">
+    <div class="row" id="class_ddl_row">
+        <label id="filter_class_label" for="filter_class_ddl">Class: </label>
+        <form method="post">
+
+        <select id="filter_class_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
+            <option disabled selected value> -- select an option -- </option>
+          {% for class in teaching_classlist %}
+            <option value="{{ class }}">{{ class }}</option>
+          {% endfor %}
+        </select>
+        </form>
+    </div>
+    <div class="row" id="manage_class_row2">
+        <a href="/class_dashboard" class="btn btn-info">View Class List</a>
+        <a id="add_student_btn" href="" class="btn btn-info">+</a>
+    </div>
+    <div class="row">
+        <table id="class_list_table" class="table table-striped table-bordered table-sm " width="100%">
+          <thead>
+            <tr>
+              <th class="th-sm">Name
+              </th>
+              <th class="th-sm">Marks Obtained
+              </th>
+              <th class="th-sm">Grade
+              </th>
+              <th class="th-sm">
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>student1</td>
+                  <td>80</td>
+                  <td>A</td>
+                  <td><a href="" class="btn btn-info">View</a></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

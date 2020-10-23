@@ -38,6 +38,11 @@ def class_dashboard():
     classlist = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
+@app.route('/manage_class')
+def manage_clas():
+    teaching_classlist = ['T1','T2','T3','T4','T5', 'T6']
+    return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
+
 @app.route('/logout')
 def logout():
     logout_user()
