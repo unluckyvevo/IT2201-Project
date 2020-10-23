@@ -4,7 +4,7 @@ from readbit.forms import LoginForm
 from readbit.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
