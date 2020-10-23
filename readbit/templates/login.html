@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="row" id="login-row">
     <div class="content-section">
-        <form method="POST" action="">
+
+        <form id="login-form" method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Log In</legend>
@@ -42,4 +44,5 @@
             </div>
         </form>
     </div>
+</div>
 {% endblock content %}
