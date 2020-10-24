@@ -120,3 +120,7 @@ def manage_module():
 @app.route('/add_student_manually')
 def add_student_manually():
     return render_template('add_student_manually.html', title='Add Student Manually')
+
+@app.route('/student_dashboard')
+def student_dashboard():
+    return render_template('student_dashboard.html', title='Student Dashboard')
