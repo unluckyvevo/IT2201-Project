@@ -57,8 +57,14 @@ def class_dashboard():
     classlist: typing.List[int] = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
+@app.route('/view_component_scores')
+def view_component_scores():
+    module_name = "Module"
+    component_name = "Component"
+    return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
+
 @app.route('/manage_class')
-def manage_clas():
+def manage_class():
     """
     Added by Dylan Woo
     Student cannot manage modules
