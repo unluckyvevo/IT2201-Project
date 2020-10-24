@@ -6,11 +6,39 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     type = db.Column(db.String(10), nullable=False, default='student')
 
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'user'
+    }
+
     def __repr__(self):
         return f"User('{self.type}', '{self.id}', '{self.username}', '{self.email}')"
+
+
+class Student(User):
+    """
+    Temp student data to test polymorphism - will be changed later
+    """
+    student_data = db.Column(db.String(50), default='I am a student')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'student'
+    }
+
+class Instructor(User):
+    """
+    Temp instructor data to test polymorphism - will be changed later
+    """
+    instructor_data = db.Column(db.String(50), default='I am an instructor')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'instructor'
+    }
