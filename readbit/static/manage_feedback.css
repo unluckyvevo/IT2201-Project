@@ -1,0 +1,37 @@
+#feedback_column1{
+    width:70%;
+}
+#feedback_column2{
+    width:30%;
+}
+
+#class_ddl_row
+{
+    justify-content: flex-end;
+}
+
+#filter_class_label
+{
+    margin:10px;
+}
+.custom-scrollbar {
+position: relative;
+height: 200px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
+#all_check, #student_check_box
+{
+    position: relative;
+    margin:0px;
+    padding:0px;
+}
+
+#feedback_submit_button_row
+{
+    justify-content: space-between;
+    margin-right:22%;
+}

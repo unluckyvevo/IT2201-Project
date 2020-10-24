@@ -42,3 +42,7 @@ table{
 {
     justify-content: flex-end;
 }
+#manage_class_button_col
+{
+    width:80px;
+}

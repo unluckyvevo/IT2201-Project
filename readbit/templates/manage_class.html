@@ -36,17 +36,18 @@
                   </div>
                         <form action="">
                              <div class="row ml-2">
-                                <input class="border overflow-auto m-2" type="file" id="file_upload_box" name="filename">
+                                <input class="border overflow-auto m-2" type="file" accept=".xls,.xlsx,.csv" id="file_upload_box" name="filename">
                              </div>
                             <div class="row m-2" id="modal_submit_row">
                                 <button type="submit" class="btn btn-info m-1 mt-3" data-toggle="modal" >Submit</button>
                             </div>
                         </form>
                     </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">Close</button>
+                </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">Close</button>
-              </div>
+
             </div>
           </div>
         </div>
@@ -71,7 +72,7 @@
                   <td>student1</td>
                   <td>80</td>
                   <td>A</td>
-                  <td><a href="" class="btn btn-info">View</a></td>
+                  <td class="text-center" id="manage_class_button_col"><a href="" class="btn btn-info">View</a></td>
               </tr>
           </tbody>
         </table>

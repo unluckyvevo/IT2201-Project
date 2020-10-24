@@ -63,6 +63,14 @@ def view_component_scores():
     component_name = "Component"
     return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
+@app.route('/manage_feedback')
+def manage_feedback():
+    module_name: typing.List[str] = "Module"
+    component_name: typing.List[str] ="Component"
+    teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
+    return render_template('manage_feedback.html', title='Manage Feedback', module_name=module_name, component_name=component_name, teaching_classlist=teaching_classlist)
+
+
 @app.route('/manage_class')
 def manage_class():
     """

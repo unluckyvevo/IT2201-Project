@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
+
+    <h2>Add feedback for {{ module_name }} | {{ component_name }}</h2>
+
+    <div class="container">
+        <div class="row">
+            <div class="column" id="feedback_column1">
+                <div class="row mt-4 ml-5">
+                   New Comment
+                </div>
+                <div class="row ml-5 mt-3">
+                    <div class="form-group w-75">
+                        <textarea class="form-control" id="feedback_textarea" rows="10"></textarea>
+                    </div>
+                </div>
+            <div class="row ml-5" id="feedback_submit_button_row">
+                <button name = "submit_comment_btn" type="submit" class="btn btn-secondary" >Back</button>
+                <button name = "submit_comment_btn" type="submit" class="btn btn-outline-primary" >Submit</button>
+            </div>
+            </div>
+            <div class="column" id="feedback_column2">
+                <div class="row mt-3 mr-3" id="class_ddl_row">
+                <label id="filter_class_label" for="filter_class_ddl">Class: </label>
+                <form method="post">
+                    <select id="filter_class_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
+                    <option disabled selected value> -- select an option -- </option>
+                    {% for class in teaching_classlist %}
+                    <option value="{{ class }}">{{ class }}</option>
+                    {% endfor %}
+                </select>
+                </form>
+            </div>
+
+                <div class="table-wrapper-scroll-y custom-scrollbar m-3">
+                    <form>
+
+                    </form>
+                  <table class="table table-bordered table-striped mt-3 mb-0">
+                    <thead>
+                        <tr>
+                          <th scope="col">
+                                <input type="checkbox" id="all_check" onClick="toggle(this)">
+                          </th>
+                          <th scope="col">Student ID</th>
+                          <th scope="col">Student Name</th>
+                        </tr>
+                    </thead>
+                      <tbody>
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" name="student_check" id="student_check_box">
+                            </th>
+                            <td>Sxxxxxx</td>
+                            <td>Mark</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" name="student_check" id="student_check_box">
+                            </th>
+                            <td>Sxxxxxx</td>
+                            <td>Mark</td>
+                        </tr>
+                          </td>
+
+                      </tbody>
+
+                  </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script>
+    function toggle(source) {
+        checkboxes = document.getElementsByName('student_check');
+        for(var checkbox in checkboxes)
+        checkbox.checked = source.checked;
+    }
+</script>
+{% endblock content %}
