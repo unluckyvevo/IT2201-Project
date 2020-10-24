@@ -65,5 +65,5 @@ table{
 }
 #add_student_btn_row
 {
-    justify-content: flex-end;
+    justify-content: space-between;
 }
