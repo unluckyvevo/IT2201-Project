@@ -116,3 +116,7 @@ def manage_module():
         }
     }]
     return render_template('manage_module.html', title='Manage Module', assessments=assessments)
+
+@app.route('/add_student_manually')
+def add_student_manually():
+    return render_template('add_student_manually.html', title='Add Student Manually')
