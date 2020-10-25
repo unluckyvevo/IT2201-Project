@@ -52,7 +52,7 @@ class Frog(db.Model):
 
 class Student(User):
     frog_list = db.relationship('Frog', backref='owner', lazy=True)
-    feedback_list = db.relationship('Feedback', lazy=True)
+    feedback_list = db.relationship('Feedback', foreign_keys='Feedback.stud_id',lazy=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'student'
@@ -73,7 +73,7 @@ class Frog(db.Model):
     __tablename__ = 'frog'
 
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     mod_name = db.Column(db.String(20), unique=False, nullable=False)
     frog_state = db.Column(db.String(20), unique=False, nullable=False, default='egg')
 
@@ -98,7 +98,7 @@ class ModuleClass(db.Model):
     __tablename__ = 'module_class'
 
     id = db.Column(db.Integer, primary_key=True)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
+    module_id = db.Column(db.Integer, db.ForeignKey(Module.id), nullable=False)
     class_name = db.Column(db.String(100), unique=True, nullable=False)
     class_size = db.Column(db.Integer, nullable=False)
     stud_list = db.relationship('Student', secondary=stud_list, lazy='subquery')
@@ -126,17 +126,16 @@ class Component(db.Model):
 
 # Backref(s): module
 class MainComp(Component):
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
-    sub_comp_list = db.relationship('SubComp', backref='main_comp', lazy=True)
+    module_id = db.Column(db.Integer, db.ForeignKey(Module.id), nullable=False)
+    sub_comp_list = db.relationship('SubComp', remote_side='SubComp.main_comp_id')
 
     __mapper_args__ = {
         'polymorphic_identity': 'main'
     }
 
 
-# Backref(s): main_comp
 class SubComp(Component):
-    main_comp_id = db.Column(db.Integer, db.ForeignKey('component.id'), nullable=False)
+    main_comp_id = db.Column(db.Integer, db.ForeignKey(MainComp.id), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'sub'
@@ -147,12 +146,12 @@ class Feedback(db.Model):
     __tablename__ = 'feedback'
 
     id = db.Column(db.Integer, primary_key=True)
-    stud_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    inst_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comp_name = db.Column(db.String(100), db.ForeignKey('component.name'), nullable=False)
-    mod_name = db.Column(db.String(100), db.ForeignKey('module.mod_name'), nullable=False)
+    stud_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
+    inst_id = db.Column(db.Integer, db.ForeignKey(Instructor.id), nullable=False)
+    comp_name = db.Column(db.String(100), db.ForeignKey(MainComp.name), nullable=False)
+    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), nullable=False)
     comment = db.Column(db.Text)
-    marks = db.Column(db.float, nullable=False)
+    marks = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
