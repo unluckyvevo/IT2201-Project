@@ -1,9 +1,16 @@
 from readbit import db, login_manager
 from flask_login import UserMixin
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+mod_list = db.Table('mod_list',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('module_id', db.Integer, db.ForeignKey('module.id'), primary_key=True)
+)
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -13,6 +20,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     type = db.Column(db.String(10), nullable=False, default='student')
+    mod_list = db.relationship('Module', secondary=mod_list, lazy='subquery')
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -37,6 +45,7 @@ class Student(User):
         'polymorphic_identity': 'student'
     }
 
+
 class Instructor(User):
     """
     Temp instructor data to test polymorphism - will be changed later
@@ -46,6 +55,7 @@ class Instructor(User):
     __mapper_args__ = {
         'polymorphic_identity': 'instructor'
     }
+
 
 class Frog(db.Model):
     __tablename__ = 'frog'
@@ -57,3 +67,13 @@ class Frog(db.Model):
 
     def __repr__(self):
         return f"Frog('{self.id}', '{self.frog_state}', '{self.mod_name}', '{self.student_id}')"
+
+
+class Module(db.Model):
+    __tablename__ = 'module'
+
+    id = db.Column(db.Integer, primary_key=True)
+    mod_name = db.Column(db.String(100), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"Module('{self.id}', '{self.mod_name}')"
