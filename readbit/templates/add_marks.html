@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
+
+ <div class="container">
+     <div class="row">
+         <h2 class="m-4">Add Marks to {{ module }} - {{ component }}</h2>
+     </div>
+     <div class="row">
+        <label id="filter_class_label" for="add_marks_ddl">Class: </label>
+        <form method="post">
+            <select id="add_marks_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
+            <option disabled selected value> -- select an option -- </option>
+            {% for class in teaching_classlist %}
+            <option value="{{ class }}">{{ class }}</option>
+            {% endfor %}
+        </select>
+        </form>
+     </div>
+     <div class="row ml-4 mt-3">
+         <div class="col-sm-5">
+            <table class="table table-bordered table-striped mt-3" id="add_marks_table">
+            <thead>
+                <tr>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Marks</th>
+                </tr>
+            </thead>
+            <form method="post" action="" id="add_marks_form">
+                <tbody>
+
+                    <tr>
+                        <td contenteditable="false">student######</td>
+                        <td contenteditable="true"></td>
+                    </tr>
+                </tbody>
+            </form>
+        </table>
+             <div class="row add_marks_btn_row m-1">
+                 <a href="manage_module" class="btn btn-secondary">Back</a>
+                 <button form="add_marks_form" type="submit" class="btn btn-outline-primary" >Submit</button>
+             </div>
+        </div>
+    </div>
+ </div>
+{% endblock content %}

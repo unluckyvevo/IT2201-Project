@@ -124,3 +124,10 @@ def add_student_manually():
 @app.route('/student_dashboard')
 def student_dashboard():
     return render_template('student_dashboard.html', title='Student Dashboard')
+
+@app.route('/add_marks')
+def add_marks():
+    teaching_classlist: typing.List[str] = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6']
+    module = 'Module'
+    component = 'Quiz 1'
+    return render_template('add_marks.html', title='Add Marks',teaching_classlist=teaching_classlist, module=module, component=component)

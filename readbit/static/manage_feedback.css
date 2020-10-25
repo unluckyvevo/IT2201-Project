@@ -16,14 +16,14 @@
 }
 .custom-scrollbar {
 position: relative;
-height: 200px;
+height: 100vh;
 overflow: auto;
 }
 .table-wrapper-scroll-y {
 display: block;
 }
 
-#all_check, #student_check_box
+#all_check, .feedback_checkboxes
 {
     position: relative;
     margin:0px;
@@ -34,4 +34,8 @@ display: block;
 {
     justify-content: space-between;
     margin-right:22%;
+}
+.add_marks_btn_row
+{
+    justify-content: space-between;
 }
