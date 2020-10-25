@@ -22,6 +22,13 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.type}', '{self.id}', '{self.username}', '{self.email}')"
 
+class Frog(db.Model):
+    frog_state = db.Column(db.Integer, primary_key=True)
+    frog_image_link = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f'Frog state {self.frog_state}'
+
 
 class Student(User):
     """
