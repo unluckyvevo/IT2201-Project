@@ -6,16 +6,17 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_class.css') }}">
 
-<h1>Module Management</h1>
 <div class="container">
-    <div class="row" id="manage_module_row2">
-        <a href="/class_dashboard" class="btn btn-info">View Class List</a>
-        <a id="add_student_btn" href="/add_assessment" class="btn btn-info">Add Assessment</a>
-    </div>
-    <div class="row">
-        <table id="class_list_table" class="table table-striped table-bordered table-sm mt-1" width="100%">
+    <div class="row"></div>
+        <h1 class=" text-center">Module Management</h1>
+        <div style="display: flex; justify-content: space-between;" id="manage_module_row2">
+            <a href="/class_dashboard" class="btn btn-info">View Class List</a>
+            <a id="add_student_btn" href="/add_assessment" class="btn btn-info">Add Assessment</a>
+        </div>
+    
+        <table id="class_list_table" class="table table-striped table-bordered table-sm mt-1 ml-0" width="100%">
           <thead>
-            <tr>
+            <tr class="text-center">
               <th class="th-sm">Assessment</th>
               <th class="th-sm">Weightage</th>
               <th class="th-sm">Date</th>
@@ -27,12 +28,12 @@
           <tbody>
             {% for assessment in assessments %}
             {% for a in assessment %}
-                <tr>
+                <tr class="text-center">
                     <td>{{ a }}</td>
                     <td>5%</td>
                     <td>12/10/2020</td>
                     <td><a href="" class="btn btn-info">View</a></td>
-                    <td><a href="" class="btn btn-info">Add Marks</a></td>
+                    <td><a href="/add_marks" class="btn btn-info">Add Marks</a></td>
                     <td><a href="" class="btn btn-info">Feedback</a></td>
                 </tr>
             {% endfor %}

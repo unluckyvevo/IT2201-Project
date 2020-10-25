@@ -3,13 +3,13 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
 
  <div class="container">
-     <div class="row">
+     <div class="text-center">
          <h2 class="m-4">Add Marks to {{ module }} - {{ component }}</h2>
      </div>
-     <div class="row">
-        <label id="filter_class_label" for="add_marks_ddl">Class: </label>
-        <form method="post">
-            <select id="add_marks_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
+     <div  style="display: flex; align-items: center; justify-content: center;">
+        <label id="filter_class_label" style="font-weight: bold;" id="add_marks_ddl">Class: </label>
+        <form method="post"> 
+            <select id="add_marks_ddl" name = "value_filter" class="form-control" onchange="">
             <option disabled selected value> -- select an option -- </option>
             {% for class in teaching_classlist %}
             <option value="{{ class }}">{{ class }}</option>
@@ -17,19 +17,18 @@
         </select>
         </form>
      </div>
-     <div class="row ml-4 mt-3">
+     <div style="display: flex; align-items: center; justify-content: center;">
          <div class="col-sm-5">
             <table class="table table-bordered table-striped mt-3" id="add_marks_table">
             <thead>
-                <tr>
+                <tr class="text-center">
                   <th scope="col">Student Name</th>
                   <th scope="col">Marks</th>
                 </tr>
             </thead>
             <form method="post" action="" id="add_marks_form">
                 <tbody>
-
-                    <tr>
+                    <tr class="text-center">
                         <td contenteditable="false">student######</td>
                         <td contenteditable="true"></td>
                     </tr>
@@ -37,8 +36,8 @@
             </form>
         </table>
              <div class="row add_marks_btn_row m-1">
-                 <a href="manage_module" class="btn btn-secondary">Back</a>
-                 <button form="add_marks_form" type="submit" class="btn btn-outline-primary" >Submit</button>
+                 <a href="manage_module" class="btn btn-outline-danger">Back</a>
+                 <button form="add_marks_form" type="submit" class="btn btn-success" >Submit</button>
              </div>
         </div>
     </div>
