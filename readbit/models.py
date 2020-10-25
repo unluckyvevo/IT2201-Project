@@ -1,5 +1,6 @@
 from readbit import db, login_manager
 from flask_login import UserMixin
+from datetime import datetime
 
 
 @login_manager.user_loader
@@ -51,6 +52,7 @@ class Frog(db.Model):
 
 class Student(User):
     frog_list = db.relationship('Frog', backref='owner', lazy=True)
+    feedback_list = db.relationship('Feedback', lazy=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'student'
@@ -66,7 +68,7 @@ class Instructor(User):
     }
 
 
-# Backrefs: owner
+# Backref(s): owner
 class Frog(db.Model):
     __tablename__ = 'frog'
 
@@ -85,12 +87,13 @@ class Module(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mod_name = db.Column(db.String(100), unique=True, nullable=False)
     class_list = db.relationship('ModuleClass', backref='module', lazy=True)
+    comp_list = db.relationship('MainComp', backref='module', lazy=True)
 
     def __repr__(self):
         return f"Module('{self.id}', '{self.mod_name}')"
 
 
-# Backrefs: module, instructors
+# Backref(s): module, instructors
 class ModuleClass(db.Model):
     __tablename__ = 'module_class'
 
@@ -102,3 +105,55 @@ class ModuleClass(db.Model):
 
     def __repr__(self):
         return f"ModuleClass('{self.id}', '{self.class_name}', '{self.class_size}')"
+
+
+class Component(db.Model):
+    __tablename__ = 'component'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    weightage = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String(10), nullable=False, default='main')
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'component'
+    }
+
+    def __repr__(self):
+        return f"Component('{self.type}', '{self.id}', '{self.weightage}')"
+
+
+# Backref(s): module
+class MainComp(Component):
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
+    sub_comp_list = db.relationship('SubComp', backref='main_comp', lazy=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'main'
+    }
+
+
+# Backref(s): main_comp
+class SubComp(Component):
+    main_comp_id = db.Column(db.Integer, db.ForeignKey('component.id'), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'sub'
+    }
+
+
+class Feedback(db.Model):
+    __tablename__ = 'feedback'
+
+    id = db.Column(db.Integer, primary_key=True)
+    stud_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    inst_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comp_name = db.Column(db.String(100), db.ForeignKey('component.name'), nullable=False)
+    mod_name = db.Column(db.String(100), db.ForeignKey('module.mod_name'), nullable=False)
+    comment = db.Column(db.Text)
+    marks = db.Column(db.float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Feedback('{self.id}', '{self.comment}', '{self.marks}', '{self.date}')"
