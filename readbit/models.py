@@ -135,7 +135,7 @@ class MainComp(Component):
 
 
 class SubComp(Component):
-    main_comp_id = db.Column(db.Integer, db.ForeignKey(MainComp.id), nullable=False)
+    main_comp_id = db.Column(db.Integer, db.ForeignKey(MainComp.id))
 
     __mapper_args__ = {
         'polymorphic_identity': 'sub'
@@ -149,7 +149,6 @@ class Feedback(db.Model):
     stud_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     inst_id = db.Column(db.Integer, db.ForeignKey(Instructor.id), nullable=False)
     comp_name = db.Column(db.String(100), db.ForeignKey(MainComp.name), nullable=False)
-    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), nullable=False)
     comment = db.Column(db.Text)
     marks = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
