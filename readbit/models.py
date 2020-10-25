@@ -31,10 +31,7 @@ class Frog(db.Model):
 
 
 class Student(User):
-    """
-    Temp student data to test polymorphism - will be changed later
-    """
-    student_data = db.Column(db.String(50), default='I am a student')
+    frog_list = db.relationship('Frog', backref='owner', lazy=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'student'
@@ -49,3 +46,14 @@ class Instructor(User):
     __mapper_args__ = {
         'polymorphic_identity': 'instructor'
     }
+
+class Frog(db.Model):
+    __tablename__ = 'frog'
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    mod_name = db.Column(db.String(20), unique=False, nullable=False)
+    frog_state = db.Column(db.String(20), unique=False, nullable=False, default='egg')
+
+    def __repr__(self):
+        return f"Frog('{self.id}', '{self.frog_state}', '{self.mod_name}', '{self.student_id}')"
