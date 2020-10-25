@@ -50,14 +50,14 @@
                       <tbody>
                         <tr>
                             <th scope="col">
-                                <input type="checkbox" name="student_check" id="student_check_box">
+                                <input type="checkbox" class="feedback_checkboxes" name="student_check_1" id="student_check_box_1">
                             </th>
                             <td>Sxxxxxx</td>
                             <td>Mark</td>
                         </tr>
                         <tr>
                             <th scope="col">
-                                <input type="checkbox" name="student_check" id="student_check_box">
+                                <input type="checkbox" class="feedback_checkboxes" name="student_check_2" id="student_check_box_2">
                             </th>
                             <td>Sxxxxxx</td>
                             <td>Mark</td>
@@ -74,9 +74,11 @@
     </div>
 <script>
     function toggle(source) {
-        checkboxes = document.getElementsByName('student_check');
-        for(var checkbox in checkboxes)
-        checkbox.checked = source.checked;
+        checkboxes = document.getElementsByClassName('feedback_checkboxes');
+        for(var c_idx in checkboxes){
+            checkboxes[c_idx].checked = source.checked;
+        }
+
     }
 </script>
 {% endblock content %}
