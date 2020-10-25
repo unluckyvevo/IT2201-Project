@@ -47,7 +47,7 @@ def module_list():
     Student cannot manage modules
     """
     if current_user.type == 'student':
-        return redirect("/dashboard")
+        return redirect(url_for('dashboard'))
         
     modulelist: typing.List[int] = [1,2,3,4,5,6,7]
     return render_template('module_list.html', title='Module List', modulelist=modulelist)
@@ -78,7 +78,7 @@ def manage_class():
     Student cannot manage modules
     """
     if current_user.type == 'student':
-        return redirect("/dashboard")
+        return redirect(url_for('dashboard'))
 
     teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
     return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
@@ -102,7 +102,7 @@ def manage_module():
         Student cannot manage modules
     """
     if current_user.type == 'student':
-            return redirect("/dashboard")
+            return redirect(url_for('dashboard'))
 
     assessments: typing.List[typing.Dict] = [{
         "Quiz 1": {
