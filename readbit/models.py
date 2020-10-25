@@ -12,6 +12,17 @@ mod_list = db.Table('mod_list',
     db.Column('module_id', db.Integer, db.ForeignKey('module.id'), primary_key=True)
 )
 
+stud_list = db.Table('stud_list',
+    db.Column('stud_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('class_id', db.Integer, db.ForeignKey('module_class.id'), primary_key=True)
+)
+
+class_list = db.Table('class_list',
+    db.Column('instr_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('class_id', db.Integer, db.ForeignKey('module_class.id'), primary_key=True)
+)
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
@@ -47,16 +58,15 @@ class Student(User):
 
 
 class Instructor(User):
-    """
-    Temp instructor data to test polymorphism - will be changed later
-    """
-    instructor_data = db.Column(db.String(50), default='I am an instructor')
+    class_list = db.relationship('ModuleClass', secondary=class_list, lazy='subquery',
+                                 backref=db.backref('instructors', lazy=True))
 
     __mapper_args__ = {
         'polymorphic_identity': 'instructor'
     }
 
 
+# Backrefs: owner
 class Frog(db.Model):
     __tablename__ = 'frog'
 
@@ -74,6 +84,21 @@ class Module(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     mod_name = db.Column(db.String(100), unique=True, nullable=False)
+    class_list = db.relationship('ModuleClass', backref='module', lazy=True)
 
     def __repr__(self):
         return f"Module('{self.id}', '{self.mod_name}')"
+
+
+# Backrefs: module, instructors
+class ModuleClass(db.Model):
+    __tablename__ = 'module_class'
+
+    id = db.Column(db.Integer, primary_key=True)
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False)
+    class_name = db.Column(db.String(100), unique=True, nullable=False)
+    class_size = db.Column(db.Integer, nullable=False)
+    stud_list = db.relationship('Student', secondary=stud_list, lazy='subquery')
+
+    def __repr__(self):
+        return f"ModuleClass('{self.id}', '{self.class_name}', '{self.class_size}')"
