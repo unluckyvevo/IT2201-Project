@@ -118,7 +118,7 @@ class Component(db.Model):
 
 # Backref(s): module
 class MainComp(Component):
-    module_id = db.Column(db.Integer, db.ForeignKey(Module.id), nullable=False)
+    module_id = db.Column(db.Integer, db.ForeignKey(Module.id), nullable=True)
     sub_comp_list = db.relationship('SubComp', remote_side='SubComp.main_comp_id')
 
     __mapper_args__ = {
@@ -127,7 +127,7 @@ class MainComp(Component):
 
 
 class SubComp(Component):
-    main_comp_id = db.Column(db.Integer, db.ForeignKey(MainComp.id))
+    main_comp_id = db.Column(db.Integer, db.ForeignKey(MainComp.id), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'sub'
