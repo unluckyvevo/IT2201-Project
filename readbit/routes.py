@@ -137,3 +137,7 @@ def view_student():
     student = 'Studentname'
     student_id = 190000
     return render_template('view_student.html', title='View Student Dashboard', student=student, student_id=student_id)
+
+@app.route('/add_component')
+def add_component():
+    return render_template('add_component.html', title='Add Component')

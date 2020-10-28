@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
+<h2>Add Component</h2>
+<div class="container">
+    <form>
+        <div class="row">
+            <input type="button" class="btn btn-info m-3" onclick="addComponent()" value="Add Component"/>
+            <input type="button" class="btn btn-outline-info m-3" onclick="addSubcomponent()" value="Add Subcomponent"/>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-4" id="comp_name_col">
+            </div>
+
+            <div class="col-sm-4" id="comp_weight_col">
+            </div>
+
+        </div>
+        <div class="row" id="add_component_submit_btn_row">
+            <a type="button" class="btn btn-secondary" href="/manage_module">Back</a>
+            <button name = "submit_add_component" type="submit" class="btn btn-success" >Submit Components/Subcomponents</button>
+        </div>
+
+
+    </form>
+
+<span id="response"></span>
+
+</div>
+<script>
+var countComponent =1;
+var countSubcomponent =1;
+
+function addComponent()
+{
+     var name_compName="component"+countComponent;
+     var weight_compName="componentweight"+countComponent;
+     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_compName+'" placeholder="Component Name"/><br/>';
+     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_compName+'" placeholder="Component Weight (%)"/><br/>';
+     countComponent += 1;
+}
+function addSubcomponent()
+{
+     var name_subcompName="subcomponent"+countSubcomponent;
+     var weight_subcompName="subcomponentweight"+countSubcomponent;
+     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_subcompName+'" placeholder="Subcomponent Name"/><br/>';
+     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_subcompName+'" placeholder="Subcomponent Weight (%)"/><br/>';
+     countSubcomponent += 1;
+}
+</script>
+{% endblock content %}

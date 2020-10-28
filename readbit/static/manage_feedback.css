@@ -39,3 +39,13 @@ display: block;
 {
     justify-content: space-between;
 }
+
+.component_weight_txts
+{
+    width: 200px;
+}
+
+#add_component_submit_btn_row
+{
+    justify-content: space-evenly;
+}
