@@ -59,6 +59,16 @@ class Instructor(User):
         'polymorphic_identity': 'instructor'
     }
 
+class UserFactory():
+    @staticmethod
+    def createUser(type, username, email, password):
+        if type == 'student':
+            return Student(type=type, username=username, email=email, password=password)
+        elif type == 'instructor':
+            return Instructor(type=type, username=username, email=email, password=password)
+        else:
+            raise ValueError(f'UserFactory.createUser(type=\'{type}\'): type must be of \'student\' or \'instructor\'')
+
 
 # Backref(s): owner
 class Frog(db.Model):
