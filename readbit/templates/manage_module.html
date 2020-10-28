@@ -8,13 +8,45 @@
 
 <div class="container">
     <div class="row"></div>
-        <h1 class=" text-center">Module Management</h1>
-        <div style="display: flex; justify-content: space-between;" id="manage_module_row2">
+        <h1 class="text-center m-4">Module Management</h1>
+        <div class = "mt-5" id="manage_module_row2">
             <a href="/class_dashboard" class="btn btn-info">View Class List</a>
             <a id="add_student_btn" href="/add_assessment" class="btn btn-info">Add Assessment</a>
+{#-----------------------------modal-----------------------------#}
+        <div class="modal fade" id="add_assessment_modal" tabindex="-1" role="dialog" aria-labelledby="#add_assessment_modal" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="add_student_modal_label">Add Student(s) via</h5>
+              </div>
+              <div class="modal-body">
+                  <div class="row m-2" id="modal_buttons">
+                      <a href="/add_marks" class="btn btn-info m-2">Add Manually</a>
+                  </div>
+                  <div class="row ml-3 mt-3">
+                      Upload Excel Sheet (.csv)
+                  </div>
+                        <form action="">
+                             <div class="row ml-2">
+                                <input class="border overflow-auto m-2" type="file" accept=".xls,.xlsx,.csv" id="file_upload_box" name="filename">
+                             </div>
+                            <div class="row m-2" id="modal_submit_row">
+                                <button type="submit" class="btn btn-info m-1 mt-3" data-toggle="modal" >Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary m-2" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+{#-----------------------------modal-----------------------------#}
+        </div>
         </div>
     
-        <table id="class_list_table" class="table table-striped table-bordered table-sm mt-1 ml-0" width="100%">
+        <table id="class_list_table" class="table table-striped table-bordered table-sm mt-1 ml-0 mt-4" width="100%">
           <thead>
             <tr class="text-center">
               <th class="th-sm">Assessment</th>
@@ -32,9 +64,9 @@
                     <td>{{ a }}</td>
                     <td>5%</td>
                     <td>12/10/2020</td>
-                    <td><a href="" class="btn btn-info">View</a></td>
-                    <td><a href="/add_marks" class="btn btn-info">Add Marks</a></td>
-                    <td><a href="" class="btn btn-info">Feedback</a></td>
+                    <td><a href="/view_component_scores" class="btn btn-info">View</a></td>
+                    <td><button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_assessment_modal">Add Marks</button></td>
+                    <td><a href="/manage_feedback" class="btn btn-info">Feedback</a></td>
                 </tr>
             {% endfor %}
             {% endfor %}

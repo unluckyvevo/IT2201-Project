@@ -67,3 +67,8 @@ table{
 {
     justify-content: space-between;
 }
+
+#manage_module_row2
+{
+    display: flex; justify-content: space-between;
+}
