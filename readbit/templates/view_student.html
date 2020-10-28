@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='student_dashboard.css') }}">
+
+<h3>{{ student }}'s Dashboard | {{ student_id }}</h3>
+    <div class="container">
+
+    <div class="row" id="view_student_tank_row">
+                <img class="responsive" src={{url_for('static', filename='student_tank.png')}} alt="{{ current_user.username }}"  width=600/>
+            </div>
+
+            <div class="row mt-5" id="student_dashboard_table_row">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar" id="table_div">
+
+                    <table class="table table-bordered table-striped mb-0">
+                    <thead>
+                          <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Comments</th>
+                          </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in range(10) %}
+                         <tr>
+                            <th scope="row">#{{ i+1 }}</th>
+                            <td>Comments from the teacher on this module</td>
+                          </tr>
+                    {% endfor %}
+
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+{% endblock content %}

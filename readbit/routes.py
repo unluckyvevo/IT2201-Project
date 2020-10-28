@@ -131,3 +131,9 @@ def add_marks():
     module = 'Module'
     component = 'Quiz 1'
     return render_template('add_marks.html', title='Add Marks',teaching_classlist=teaching_classlist, module=module, component=component)
+
+@app.route('/view_student')
+def view_student():
+    student = 'Studentname'
+    student_id = 190000
+    return render_template('view_student.html', title='View Student Dashboard', student=student, student_id=student_id)

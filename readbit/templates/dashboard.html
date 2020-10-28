@@ -1,25 +1,25 @@
-{% extends "layout.html" %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='module_list.css') }}">
-<h1>Module List</h1>
-<div class="container">
-
-    {% for module_row in modulelist | batch(3, '&nbsp;') %}
-    <div class="row" id="module_list_row">
-        {% for module in module_row %}
-        <div class="column">
-            <a href="">
-                <img src={{url_for('static', filename='froggif.gif')}} alt="{{ module }} link"  width=300/>
-            </a>
-        module #{{ module }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endfor %}
-
-
-
-
-</div>
-
-{% endblock content %}
+{#{% extends "layout.html" %}#}
+{#{% block content %}#}
+{#<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='module_list.css') }}">#}
+{#<h1>Module List</h1>#}
+{#<div class="container">#}
+{##}
+{#    {% for module_row in modulelist | batch(3, '&nbsp;') %}#}
+{#    <div class="row" id="module_list_row">#}
+{#        {% for module in module_row %}#}
+{#        <div class="column">#}
+{#            <a href="">#}
+{#                <img src={{url_for('static', filename='froggif.gif')}} alt="{{ module }} link"  width=300/>#}
+{#            </a>#}
+{#        module #{{ module }}#}
+{#        </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#    {% endfor %}#}
+{##}
+{##}
+{##}
+{##}
+{#</div>#}
+{##}
+{#{% endblock content %}#}

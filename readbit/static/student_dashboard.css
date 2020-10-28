@@ -38,3 +38,7 @@
 #table_div{
     width: 65vw;
 }
+
+#view_student_tank_row{
+    justify-content: center;
+}
