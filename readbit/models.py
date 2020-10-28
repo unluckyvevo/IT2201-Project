@@ -1,7 +1,7 @@
 from readbit import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime
-
+import logging
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -58,6 +58,16 @@ class Instructor(User):
     __mapper_args__ = {
         'polymorphic_identity': 'instructor'
     }
+
+class UserFactory():
+    @staticmethod
+    def createUser(type, username, email, password):
+        if type == 'student':
+            return Student(type=type, username=username, email=email, password=password)
+        elif type == 'instructor':
+            return Instructor(type=type, username=username, email=email, password=password)
+        else:
+            raise ValueError(f'UserFactory.createUser(type=\'{type}\'): type must be of \'student\' or \'instructor\'')
 
 
 # Backref(s): owner
@@ -133,6 +143,17 @@ class SubComp(Component):
         'polymorphic_identity': 'sub'
     }
 
+class ComponentFactory():
+    @staticmethod
+    def createComponent(type, name, weightage, **kwargs):
+        if type == 'main':
+            module_id = kwargs.get('module_id')
+            return MainComp(name=name, weightage=weightage, type=type, module_id=module_id)
+        elif type == 'sub':
+            main_comp_id = kwargs.get('main_comp_id')
+            return SubComp(name=name, weightage=weightage, type=type, main_comp_id=main_comp_id)
+        else:
+            raise ValueError(f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\'')
 
 class Feedback(db.Model):
     __tablename__ = 'feedback'
