@@ -28,7 +28,7 @@ def login():
                 return redirect(url_for(next_page[1:]))
 
             else:
-                return redirect(url_for('dashboard')) if current_user.type == 'student' else redirect(
+                return redirect(url_for('student_dashboard')) if current_user.type == 'student' else redirect(
                     url_for('module_list'))
 
         else:
@@ -78,7 +78,7 @@ def manage_class():
     Student cannot manage modules
     """
     if current_user.type == 'student':
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('student_dashboard'))
 
     teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
     return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
