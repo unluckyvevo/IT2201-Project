@@ -1,9 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request
 from readbit import app, db, bcrypt
 from readbit.forms import LoginForm
-from readbit.models import User
+from readbit.models import User, Module
 from flask_login import login_user, current_user, logout_user, login_required
 import typing, logging
+from flask import request
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
@@ -44,8 +45,9 @@ def module_list():
     """
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    modulelist: typing.List[int] = [1,2,3,4,5,6,7]
-    return render_template('module_list.html', title='Module List', modulelist=current_user)
+    # modulelist: typing.List[int] = [1,2,3,4,5,6,7]
+
+    return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
 
 @app.route('/class_dashboard')
 def class_dashboard():
@@ -105,6 +107,8 @@ def manage_module():
     if current_user.type == 'student':
             return redirect(url_for('student_dashboard'))
 
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first().mod_name
     assessments: typing.List[typing.Dict] = [{
         "Quiz 1": {
             "Weightage": "5%",
@@ -116,7 +120,7 @@ def manage_module():
             "Date": "20/10/2020"
         }
     }]
-    return render_template('manage_module.html', title='Manage Module', assessments=assessments)
+    return render_template('manage_module.html', title='Manage Module', assessments=assessments, modid=modid, modname=module)
 
 @app.route('/add_student_manually')
 def add_student_manually():
