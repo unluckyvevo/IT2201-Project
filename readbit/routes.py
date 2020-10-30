@@ -3,16 +3,15 @@ from readbit import app, db, bcrypt
 from readbit.forms import LoginForm
 from readbit.models import User
 from flask_login import login_user, current_user, logout_user, login_required
-import typing
+import typing, logging
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 
 def login():
-
     if current_user.is_authenticated:
         if current_user.type == 'student':
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('student_dashboard'))
         return redirect(url_for('module_list'))
         
     form = LoginForm()
@@ -36,9 +35,6 @@ def login():
 
     return render_template('login.html', title='Login', form=form)
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html', title='Personal Dashboard')
 
 @app.route('/module_list')
 def module_list():
@@ -47,24 +43,29 @@ def module_list():
     Student cannot manage modules
     """
     if current_user.type == 'student':
-        return redirect(url_for('dashboard'))
-        
+        return redirect(url_for('student_dashboard'))
     modulelist: typing.List[int] = [1,2,3,4,5,6,7]
-    return render_template('module_list.html', title='Module List', modulelist=modulelist)
+    return render_template('module_list.html', title='Module List', modulelist=current_user)
 
 @app.route('/class_dashboard')
 def class_dashboard():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     classlist: typing.List[int] = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
 @app.route('/view_component_scores')
 def view_component_scores():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     module_name = "Module"
     component_name = "Component"
     return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
 @app.route('/manage_feedback')
 def manage_feedback():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     module_name: typing.List[str] = "Module"
     component_name: typing.List[str] ="Component"
     teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
@@ -102,7 +103,7 @@ def manage_module():
         Student cannot manage modules
     """
     if current_user.type == 'student':
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('student_dashboard'))
 
     assessments: typing.List[typing.Dict] = [{
         "Quiz 1": {
@@ -119,6 +120,8 @@ def manage_module():
 
 @app.route('/add_student_manually')
 def add_student_manually():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     return render_template('add_student_manually.html', title='Add Student Manually')
 
 @app.route('/student_dashboard')
@@ -127,6 +130,8 @@ def student_dashboard():
 
 @app.route('/add_marks')
 def add_marks():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     teaching_classlist: typing.List[str] = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6']
     module = 'Module'
     component = 'Quiz 1'
@@ -134,10 +139,14 @@ def add_marks():
 
 @app.route('/view_student')
 def view_student():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     student = 'Studentname'
     student_id = 190000
     return render_template('view_student.html', title='View Student Dashboard', student=student, student_id=student_id)
 
 @app.route('/add_component')
 def add_component():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
     return render_template('add_component.html', title='Add Component')
