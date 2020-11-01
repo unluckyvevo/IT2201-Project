@@ -1,52 +1,84 @@
 {% extends "layout.html" %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
-<h2>Add Component</h2>
-<div class="container">
-    <form>
-        <div class="row">
-            <input type="button" class="btn btn-info m-3" onclick="addComponent()" value="Add Component"/>
-            <input type="button" class="btn btn-outline-info m-3" onclick="addSubcomponent()" value="Add Subcomponent"/>
-        </div>
-        <div class="row">
-
-            <div class="col-sm-4" id="comp_name_col">
+<!--<h2>Add Component</h2>-->
+<div class="row" id="component-row">
+    <div class="content-section">
+        <form id="add-component-form" method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add Component</legend>
+                <div class="form-group">
+                    <div class="form-group">
+                        {% for main in form.main_comps %}
+                            <div class="form-group">
+                                {{ main.comp_name(class="bg-light") }}
+                                {{ main.weightage(class="bg-light") }}
+                            </div>
+                             <div class="form-group">
+                                 {% for sub in main.sub_comps %}
+                                     <div class="form-group">
+                                        {{ sub.comp_name }}
+                                        {{ sub.weightage }}
+                                    </div>
+                                 {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ main.add_sub(class="btn btn-outline-info btn-sm", formnovalidate=True) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group">
+                 {{ form.add_main(class="btn btn-outline-info", formnovalidate=True) }}
+                    {{ form.submit(class="btn btn-info") }}
             </div>
+        </form>
+    <!--    <form>-->
+    <!--        <div class="row">-->
+    <!--            <input type="button" class="btn btn-info m-3" onclick="addComponent()" value="Add Component"/>-->
+    <!--            <input type="button" class="btn btn-outline-info m-3" onclick="addSubcomponent()" value="Add Subcomponent"/>-->
+    <!--        </div>-->
+    <!--        <div class="row">-->
 
-            <div class="col-sm-4" id="comp_weight_col">
-            </div>
+    <!--            <div class="col-sm-4" id="comp_name_col">-->
+    <!--            </div>-->
 
-        </div>
-        <div class="row" id="add_component_submit_btn_row">
-            <a type="button" class="btn btn-secondary" href="/manage_module">Back</a>
-            <button name = "submit_add_component" type="submit" class="btn btn-success" >Submit Components/Subcomponents</button>
-        </div>
+    <!--            <div class="col-sm-4" id="comp_weight_col">-->
+    <!--            </div>-->
+
+    <!--        </div>-->
+    <!--        <div class="row" id="add_component_submit_btn_row">-->
+    <!--            <a type="button" class="btn btn-secondary" href="/manage_module">Back</a>-->
+    <!--            <button name = "submit_add_component" type="submit" class="btn btn-success" >Submit Components/Subcomponents</button>-->
+    <!--        </div>-->
 
 
-    </form>
+    <!--    </form>-->
 
-<span id="response"></span>
-
+    <!--<span id="response"></span>-->
+    </div>
 </div>
-<script>
-var countComponent =1;
-var countSubcomponent =1;
+<!--<script>-->
+<!--var countComponent =1;-->
+<!--var countSubcomponent =1;-->
 
-function addComponent()
-{
-     var name_compName="component"+countComponent;
-     var weight_compName="componentweight"+countComponent;
-     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_compName+'" placeholder="Component Name"/><br/>';
-     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_compName+'" placeholder="Component Weight (%)"/><br/>';
-     countComponent += 1;
-}
-function addSubcomponent()
-{
-     var name_subcompName="subcomponent"+countSubcomponent;
-     var weight_subcompName="subcomponentweight"+countSubcomponent;
-     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_subcompName+'" placeholder="Subcomponent Name"/><br/>';
-     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_subcompName+'" placeholder="Subcomponent Weight (%)"/><br/>';
-     countSubcomponent += 1;
-}
-</script>
+<!--function addComponent()-->
+<!--{-->
+<!--     var name_compName="component"+countComponent;-->
+<!--     var weight_compName="componentweight"+countComponent;-->
+<!--     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_compName+'" placeholder="Component Name"/><br/>';-->
+<!--     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_compName+'" placeholder="Component Weight (%)"/><br/>';-->
+<!--     countComponent += 1;-->
+<!--}-->
+<!--function addSubcomponent()-->
+<!--{-->
+<!--     var name_subcompName="subcomponent"+countSubcomponent;-->
+<!--     var weight_subcompName="subcomponentweight"+countSubcomponent;-->
+<!--     document.getElementById('comp_name_col').innerHTML+='<input class="form-control" type="text" id="'+name_subcompName+'" placeholder="Subcomponent Name"/><br/>';-->
+<!--     document.getElementById('comp_weight_col').innerHTML+='<input class="form-control" type="text" id="'+weight_subcompName+'" placeholder="Subcomponent Weight (%)"/><br/>';-->
+<!--     countSubcomponent += 1;-->
+<!--}-->
+<!--</script>-->
 {% endblock content %}

@@ -86,3 +86,10 @@ a.article-title:hover {
   display: flex;
   justify-content: center;
 }
+
+#component-row
+{
+  display: flex;
+  justify-content: center;
+}
+

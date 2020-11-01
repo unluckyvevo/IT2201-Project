@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request
-from readbit import app, db, bcrypt
-from readbit.forms import LoginForm
-from readbit.models import User, Module
+from readbit import *
+from readbit.forms import *
+from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
 import typing, logging
 from flask import request
@@ -149,8 +149,23 @@ def view_student():
     student_id = 190000
     return render_template('view_student.html', title='View Student Dashboard', student=student, student_id=student_id)
 
-@app.route('/add_component')
+@app.route('/add_component', methods=['GET', 'POST'])
 def add_component():
+    form = AddComponentForm()
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    return render_template('add_component.html', title='Add Component')
+
+    if form.add_main.data:
+        form.main_comps.append_entry()
+        return render_template('add_component.html', title='Add Component', form=form)
+
+    for main in form.main_comps:
+        if main.add_sub.data:
+            main.sub_comps.append_entry()
+            return render_template('add_component.html', title='Add Component', form=form)
+
+
+    # if form.validate_on_submit():
+    #     # do something with data
+
+    return render_template('add_component.html', title='Add Component', form=form)
