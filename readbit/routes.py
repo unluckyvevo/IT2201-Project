@@ -49,12 +49,7 @@ def module_list():
 
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
 
-@app.route('/class_dashboard')
-def class_dashboard():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-    classlist: typing.List[int] = [1,2,3,4,5,6]
-    return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
+
 
 @app.route('/view_component_scores')
 def view_component_scores():
@@ -131,6 +126,13 @@ def add_student_manually():
 @app.route('/student_dashboard')
 def student_dashboard():
     return render_template('student_dashboard.html', title='Student Dashboard')
+
+@app.route('/class_dashboard')
+def class_dashboard():
+    # if current_user.type == 'student':
+    #     return redirect(url_for('student_dashboard'))
+    classlist: typing.List[int] = [1,2,3,4,5,6]
+    return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
 @app.route('/add_marks')
 def add_marks():

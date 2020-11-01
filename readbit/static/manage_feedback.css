@@ -47,5 +47,9 @@ display: block;
 
 #add_component_submit_btn_row
 {
-    justify-content: space-evenly;
+    justify-content: center;
+}
+#add_comp_btn_col
+{
+    width: 500px;
 }

@@ -17,7 +17,7 @@
         </form>
     </div>
     <div class="row" id="manage_class_row2">
-        <a href="/class_dashboard" class="btn btn-info">View Class List</a>
+        <a href="{{ url_for('class_dashboard')}}" class="btn btn-info">View Class List</a>
         <button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_student_modal">
           +
         </button>
@@ -29,7 +29,7 @@
               </div>
               <div class="modal-body">
                   <div class="row m-2" id="modal_buttons">
-                      <a href="/add_student_manually" class="btn btn-info m-2">Add Manually</a>
+                      <a href="{{ url_for('add_student_manually') }}" class="btn btn-info m-2">Add Manually</a>
                   </div>
                   <div class="row ml-3 mt-3">
                       Upload Excel Sheet (.csv)
@@ -72,7 +72,7 @@
                   <td>student1</td>
                   <td>80</td>
                   <td>A</td>
-                  <td class="text-center" id="manage_class_button_col"><a href="/view_student" class="btn btn-info">View</a></td>
+                  <td class="text-center" id="manage_class_button_col"><a href="{{ url_for('view_student') }}" class="btn btn-info">View</a></td>
               </tr>
           </tbody>
         </table>

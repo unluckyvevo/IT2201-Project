@@ -10,8 +10,8 @@
     <div class="row"></div>
         <h1 class="text-center m-4" >{{modname}}</h1>
         <div class = "mt-5" id="manage_module_row2">
-            <a href="/class_dashboard" class="btn btn-info">View Class List</a>
-            <a id="add_student_btn" href="/add_component" class="btn btn-info">Add Assessment</a>
+            <a href="{{ url_for('manage_class') }}" class="btn btn-info">View Class List</a>
+            <a id="add_student_btn" href="{{ url_for('add_component') }}" class="btn btn-info">Add Assessment</a>
 {#-----------------------------modal-----------------------------#}
         <div class="modal fade" id="add_assessment_modal" tabindex="-1" role="dialog" aria-labelledby="#add_assessment_modal" aria-hidden="true">
           <div class="modal-dialog" role="document">
@@ -21,7 +21,7 @@
               </div>
               <div class="modal-body">
                   <div class="row m-2" id="modal_buttons">
-                      <a href="/add_marks" class="btn btn-info m-2">Add Manually</a>
+                      <a href="{{ url_for('add_marks') }}" class="btn btn-info m-2">Add Manually</a>
                   </div>
                   <div class="row ml-3 mt-3">
                       Upload Excel Sheet (.csv)
@@ -64,9 +64,9 @@
                     <td>{{ a }}</td>
                     <td>5%</td>
                     <td>12/10/2020</td>
-                    <td><a href="/view_component_scores" class="btn btn-info">View</a></td>
+                    <td><a href="{{ url_for('manage_class') }}" class="btn btn-info">View</a></td>
                     <td><button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_assessment_modal">Add Marks</button></td>
-                    <td><a href="/manage_feedback" class="btn btn-info">Feedback</a></td>
+                    <td><a href="{{ url_for('manage_feedback') }}" class="btn btn-info">Feedback</a></td>
                 </tr>
             {% endfor %}
             {% endfor %}
