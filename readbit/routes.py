@@ -151,9 +151,10 @@ def view_student():
 
 @app.route('/add_component', methods=['GET', 'POST'])
 def add_component():
-    form = AddComponentForm()
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
+
+    form = AddComponentForm()
 
     if form.add_main.data:
         form.main_comps.append_entry()
@@ -163,7 +164,6 @@ def add_component():
         if main.add_sub.data:
             main.sub_comps.append_entry()
             return render_template('add_component.html', title='Add Component', form=form)
-
 
     # if form.validate_on_submit():
     #     # do something with data
