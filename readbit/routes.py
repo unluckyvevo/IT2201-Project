@@ -157,17 +157,18 @@ def add_component():
         return redirect(url_for('student_dashboard'))
 
     form = AddComponentForm()
+    modid = request.args.get('mod_id')
 
     if form.add_main.data:
         form.main_comps.append_entry()
-        return render_template('add_component.html', title='Add Component', form=form)
+        return render_template('add_component.html', title='Add Component', form=form, modid=modid)
 
     for main in form.main_comps:
         if main.add_sub.data:
             main.sub_comps.append_entry()
-            return render_template('add_component.html', title='Add Component', form=form)
+            return render_template('add_component.html', title='Add Component', form=form, modid=modid)
 
     # if form.validate_on_submit():
     #     # do something with data
 
-    return render_template('add_component.html', title='Add Component', form=form)
+    return render_template('add_component.html', title='Add Component', form=form, modid=modid)

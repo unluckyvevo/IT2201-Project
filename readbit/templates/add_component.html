@@ -52,7 +52,7 @@
     </div>
         <div class="row" id="add_component_submit_btn_row">
             <div class="column d-flex justify-content-between" id="add_comp_btn_col">
-                <button class="btn btn-outline-danger" onclick="javascript:history.back()">Back</button>
+                <a href="{{url_for('manage_module', mod_id=modid)}}" class="btn btn-outline-danger">Back</a>
                 {{ form.submit(class="btn btn-info") }}
             </div>
         </div>
