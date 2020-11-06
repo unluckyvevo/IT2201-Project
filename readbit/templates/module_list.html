@@ -10,7 +10,7 @@
         {% if module in modulelist %}
         <div class="column" id="module_list_col">
             <a href={{ url_for('manage_module', mod_id=module.id) }}>
-                <img class="responsive" src="{{url_for('static', filename='froggif.gif')}}" alt="{{ module }} link" width=300/>
+                <img class="responsive" src="{{url_for('static', filename='classroom.jpg')}}" alt="{{ module }} link" width=300/>
             </a>
         {{ module.mod_name }}
         </div>
