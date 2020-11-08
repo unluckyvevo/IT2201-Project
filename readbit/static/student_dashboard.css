@@ -53,3 +53,10 @@
 #view_student_tank_row{
     justify-content: center;
 }
+#student_dashboard_frog
+{
+    position:absolute;
+    padding-top: 200px;
+    height: auto;
+    width:8%
+}

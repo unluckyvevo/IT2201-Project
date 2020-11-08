@@ -125,7 +125,12 @@ def add_student_manually():
 
 @app.route('/student_dashboard')
 def student_dashboard():
-    return render_template('student_dashboard.html', title='Student Dashboard')
+    student_frog_state = url_for('static', filename='frog_state_1.png')
+
+    context = {
+        'student_frog_state': student_frog_state
+    }
+    return render_template('student_dashboard.html', title='Student Dashboard', context=context)
 
 @app.route('/class_dashboard')
 def class_dashboard():

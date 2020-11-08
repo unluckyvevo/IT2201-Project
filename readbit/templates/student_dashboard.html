@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='student_dashboard.css') }}">
 
 <div class="row m-0 mb-2" id="header_row">
@@ -20,6 +21,7 @@
         <div class="col-sm-10" id="student_dashboard_right_col">
             <div class="row" id="student_tank_row">
                 <img class="responsive" src={{url_for('static', filename='student_tank.png')}} alt="{{ current_user.username }}"  width=600/>
+                <img class="responsive" src="{{ context.student_frog_state }}"  alt="{{ student_frog_state }}" id="student_dashboard_frog" width=""/>
             </div>
 
             <div class="row" id="student_dashboard_table_row">
