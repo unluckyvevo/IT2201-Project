@@ -7,11 +7,11 @@
     <div class="row" id="component-row">
         <div class="content-section mt-3" id="add_comp_content_section">
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Module</legend>
+                    <legend>Module</legend>
                     <div class="form-group">
                         <div class="form-group">
                             {% for main in form.main_comps %}
-                                <div class="form-group">
+                                <div class="form-group"><hr>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             {{ main.comp_name(class="form-control") }}
@@ -26,11 +26,12 @@
                                      {% for sub in main.sub_comps %}
                                          <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-6">
-                                                    {{ sub.comp_name(class="form-control") }}
+                                                <div class="col-sm-2 text-right"><img class="responsive" src="{{url_for('static', filename='frog_state_1.png')}}" alt="-->" width=25/></div>
+                                                <div class="col-sm-5 pl-0">
+                                                    {{ sub.comp_name(class="form-control form-control-sm") }}
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    {{ sub.weightage(class="form-control")}}
+                                                <div class="col-sm-5 pl-0">
+                                                    {{ sub.weightage(class="form-control form-control-sm")}}
                                                 </div>
                                             </div>
                                         </div>
