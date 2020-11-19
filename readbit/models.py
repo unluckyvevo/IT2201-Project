@@ -45,6 +45,7 @@ class User(db.Model, UserMixin):
 class Student(User):
     frog_list = db.relationship('Frog', backref='owner', lazy=True)
     feedback_list = db.relationship('Feedback', foreign_keys='Feedback.stud_id',lazy=True)
+    listeners = db.relationship('ModuleClass', secondary=stud_list, lazy='subquery', back_populates='stud_list')
 
     __mapper_args__ = {
         'polymorphic_identity': 'student'
@@ -69,19 +70,19 @@ class UserFactory():
         else:
             raise ValueError(f'UserFactory.createUser(type=\'{type}\'): type must be of \'student\' or \'instructor\'')
 
+class StudentNotifier():
+    @staticmethod
+    def attachListener(student, module_class):
+        student.listeners.append(module_class)
 
-# Backref(s): owner
-class Frog(db.Model):
-    __tablename__ = 'frog'
+    @staticmethod
+    def detachListener(student, module_class):
+        student.listeners.remove(module_class)
 
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
-    mod_name = db.Column(db.String(20), unique=False, nullable=False)
-    frog_state = db.Column(db.String(20), unique=False, nullable=False, default='egg')
-
-    def __repr__(self):
-        return f"Frog('{self.id}', '{self.frog_state}', '{self.mod_name}', '{self.student_id}')"
-
+    @staticmethod
+    def notify(student):
+        for listener in student.listeners:
+            ClassManager.updateFrogList(listener)
 
 class Module(db.Model):
     __tablename__ = 'module'
@@ -103,11 +104,38 @@ class ModuleClass(db.Model):
     module_id = db.Column(db.Integer, db.ForeignKey(Module.id), nullable=False)
     class_name = db.Column(db.String(100), unique=True, nullable=False)
     class_size = db.Column(db.Integer, nullable=False)
-    stud_list = db.relationship('Student', secondary=stud_list, lazy='subquery')
+    stud_list = db.relationship('Student', secondary=stud_list, lazy='subquery', back_populates='listeners')
+    frog_list = db.relationship('Frog', backref='class', lazy=True)
 
     def __repr__(self):
         return f"ModuleClass('{self.id}', '{self.class_name}', '{self.class_size}')"
 
+
+class ClassManager():
+    @staticmethod
+    def updateFrogList(module_class):
+        for frog in module_class.frog_list:
+            FrogManager.updateState(frog)
+
+
+# Backref(s): owner
+class Frog(db.Model):
+    __tablename__ = 'frog'
+
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
+    class_id = db.Column(db.Integer, db.ForeignKey(ModuleClass.id), nullable=False)
+    mod_name = db.Column(db.String(20), unique=False, nullable=False)
+    frog_state = db.Column(db.String(20), unique=False, nullable=False, default='egg')
+
+    def __repr__(self):
+        return f"Frog('{self.id}', '{self.frog_state}', '{self.mod_name}', '{self.student_id}')"
+
+
+class FrogManager():
+    @staticmethod
+    def updateState(frog):
+        pass
 
 class Component(db.Model):
     __tablename__ = 'component'
