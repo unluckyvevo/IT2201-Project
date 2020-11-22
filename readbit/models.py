@@ -154,16 +154,17 @@ class ClassManager():
 
     @staticmethod
     def addStudent(module_class, student):
-        if student not in module_class.stud_list and len(module_class.stud_list) < module_class.class_size:
-            module_class.stud_list.append(student)
-            for frog in student.frog_list:
-                if frog.mod_name == module_class.module.mod_name:
-                    module_class.frog_list.append(frog)
-                    break
+        if student in module_class.stud_list:
+            raise ValueError("Append failed: Student is already registered in the class")
+        elif len(module_class.stud_list) >= module_class.class_size:
+            raise ValueError("Append failed: Class is already full")
+        elif module_class.module in student.mod_list:
+            raise ValueError("Append failed: Student is already in another class")
         else:
-            raise ValueError("Append failed: Student already exist")
-
-
+            frog = Frog(student_id=student.id, class_id=module_class.id, mod_name=module_class.module.mod_name)
+            module_class.frog_list.append(frog)
+            UserManager.addMod(student, module_class.module)
+            module_class.stud_list.append(student)
 
 
 # Backref(s): owner
