@@ -206,6 +206,7 @@ class Component(db.Model):
     name = db.Column(db.String(100), nullable=False)
     weightage = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(10), nullable=False, default='main')
+    feedback_list = db.relationship('Feedback', backref='component', lazy=True)
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -232,6 +233,19 @@ class SubComp(Component):
     __mapper_args__ = {
         'polymorphic_identity': 'sub'
     }
+
+class ComponentManager():
+    @staticmethod
+    def addSubComp(main_comp, sub_comp):
+        total = sub_comp.weightage
+        for sub in main_comp.sub_comp_list:
+            total += sub.weightage
+
+        if total <= main_comp.weightage:
+            main_comp.sub_comp_list.append(sub_comp)
+        else:
+            raise ValueError("Append failed: Total sub-comp weightage exceeds main-comp")
+
 
 class ComponentFactory():
     @staticmethod
