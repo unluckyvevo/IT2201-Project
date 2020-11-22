@@ -182,7 +182,22 @@ class Frog(db.Model):
 class FrogManager():
     @staticmethod
     def updateState(frog):
-        pass
+        total = 0
+        for feedback in frog.owner.feedback_list:
+            if feedback.mod_name == frog.mod_name:
+                total += feedback.marks
+
+        if (total <= 19):
+            frog.frog_state = 'egg'
+        elif (total <= 39):
+            frog.frog_state = 'tadpole'
+        elif (total <= 59):
+            frog.frog_state = 'frogling'
+        elif (total <= 79):
+            frog.frog_state = 'froglet'
+        else:
+            frog.frog_state = 'frog'
+
 
 class Component(db.Model):
     __tablename__ = 'component'
