@@ -86,7 +86,8 @@ class UserFactory():
 class StudentNotifier():
     @staticmethod
     def attachListener(student, module_class):
-        student.listeners.append(module_class)
+        if module_class not in student.listeners:
+            student.listeners.append(module_class)
 
     @staticmethod
     def detachListener(student, module_class):
