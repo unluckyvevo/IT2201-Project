@@ -35,11 +35,11 @@ Go to `http://127.0.0.1:5000/` to view the web application
 
 
 #### Account credentials (student):
-* Email: student@readbit.com 
+* Email: student1@readbit.com 
 * Password: student
 
 #### Account credentials (instructor):
-- Email: instructor@readbit.com 
+- Email: instructor1@readbit.com 
 - Password: instructor
 
 ## Bugs and Issues
