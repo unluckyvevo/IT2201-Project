@@ -290,3 +290,27 @@ class FeedbackManager():
             feedback.comment = comment
         else:
             raise ValueError("Comment must not be empty")
+
+class iInstructor():
+    @staticmethod
+    def addStudent():
+        pass
+
+    @staticmethod
+    def addStudentCSV():
+        pass
+
+    @staticmethod
+    def addComponent():
+        pass
+
+    @staticmethod
+    def addMarks():
+        pass
+
+    @staticmethod
+    def addMarksCSV():
+        pass
+
+class iStudent():
+    pass
