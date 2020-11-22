@@ -109,6 +109,27 @@ class Module(db.Model):
         return f"Module('{self.id}', '{self.mod_name}')"
 
 
+class ModuleManager():
+    @staticmethod
+    def addClass(module, module_class):
+        if module_class not in module.class_list:
+            module.class_list.append(module_class)
+        else:
+            raise ValueError("Append failed: Class already exist")
+
+    @staticmethod
+    def addComponent(module, main_component):
+        total = main_component.weightage
+        for comp in module.comp_list:
+            total += comp.weightage
+
+        if total <= 100:
+            module.comp_list.append(main_component)
+        else:
+            raise ValueError("Append failed: Total component weightage exceeds 100")
+
+
+
 # Backref(s): module, instructors
 class ModuleClass(db.Model):
     __tablename__ = 'module_class'
