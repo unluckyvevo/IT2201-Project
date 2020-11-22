@@ -1,4 +1,4 @@
-from readbit import db, login_manager
+from readbit import db, login_manager, bcrypt
 from flask_login import UserMixin
 from datetime import datetime
 import logging
@@ -41,6 +41,19 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.type}', '{self.id}', '{self.username}', '{self.email}')"
+
+class UserManager():
+    @staticmethod
+    def addMod(user, module):
+        if module not in user.mod_list:
+            user.mod_list.append(module)
+        else:
+            raise ValueError("Append failed: Module already exist")
+
+    @staticmethod
+    def changePassword(user, password):
+        hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
+        user.password = hashed_pw
 
 class Student(User):
     frog_list = db.relationship('Frog', backref='owner', lazy=True)
@@ -96,6 +109,27 @@ class Module(db.Model):
         return f"Module('{self.id}', '{self.mod_name}')"
 
 
+class ModuleManager():
+    @staticmethod
+    def addClass(module, module_class):
+        if module_class not in module.class_list:
+            module.class_list.append(module_class)
+        else:
+            raise ValueError("Append failed: Class already exist")
+
+    @staticmethod
+    def addComponent(module, main_component):
+        total = main_component.weightage
+        for comp in module.comp_list:
+            total += comp.weightage
+
+        if total <= 100:
+            module.comp_list.append(main_component)
+        else:
+            raise ValueError("Append failed: Total component weightage exceeds 100")
+
+
+
 # Backref(s): module, instructors
 class ModuleClass(db.Model):
     __tablename__ = 'module_class'
@@ -117,6 +151,19 @@ class ClassManager():
         for frog in module_class.frog_list:
             FrogManager.updateState(frog)
 
+    @staticmethod
+    def addStudent(module_class, student):
+        if student not in module_class.stud_list and len(module_class.stud_list) < module_class.class_size:
+            module_class.stud_list.append(student)
+            for frog in student.frog_list:
+                if frog.mod_name == module_class.module.mod_name:
+                    module_class.frog_list.append(frog)
+                    break
+        else:
+            raise ValueError("Append failed: Student already exist")
+
+
+
 
 # Backref(s): owner
 class Frog(db.Model):
@@ -135,7 +182,22 @@ class Frog(db.Model):
 class FrogManager():
     @staticmethod
     def updateState(frog):
-        pass
+        total = 0
+        for feedback in frog.owner.feedback_list:
+            if feedback.mod_name == frog.mod_name:
+                total += feedback.marks
+
+        if (total <= 19):
+            frog.frog_state = 'egg'
+        elif (total <= 39):
+            frog.frog_state = 'tadpole'
+        elif (total <= 59):
+            frog.frog_state = 'frogling'
+        elif (total <= 79):
+            frog.frog_state = 'froglet'
+        else:
+            frog.frog_state = 'frog'
+
 
 class Component(db.Model):
     __tablename__ = 'component'
@@ -144,6 +206,7 @@ class Component(db.Model):
     name = db.Column(db.String(100), nullable=False)
     weightage = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(10), nullable=False, default='main')
+    feedback_list = db.relationship('Feedback', backref='component', lazy=True)
 
     __mapper_args__ = {
         'polymorphic_on': type,
@@ -171,6 +234,19 @@ class SubComp(Component):
         'polymorphic_identity': 'sub'
     }
 
+class ComponentManager():
+    @staticmethod
+    def addSubComp(main_comp, sub_comp):
+        total = sub_comp.weightage
+        for sub in main_comp.sub_comp_list:
+            total += sub.weightage
+
+        if total <= main_comp.weightage:
+            main_comp.sub_comp_list.append(sub_comp)
+        else:
+            raise ValueError("Append failed: Total sub-comp weightage exceeds main-comp")
+
+
 class ComponentFactory():
     @staticmethod
     def createComponent(type, name, weightage, **kwargs):
@@ -183,16 +259,58 @@ class ComponentFactory():
         else:
             raise ValueError(f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\'')
 
+
+# Backref(s): component
 class Feedback(db.Model):
     __tablename__ = 'feedback'
 
     id = db.Column(db.Integer, primary_key=True)
     stud_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     inst_id = db.Column(db.Integer, db.ForeignKey(Instructor.id), nullable=False)
-    comp_name = db.Column(db.String(100), db.ForeignKey(MainComp.name), nullable=False)
+    comp_id = db.Column(db.Integer, db.ForeignKey(Component.id), nullable=False)
+    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), unique=True, nullable=False)
     comment = db.Column(db.Text)
     marks = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"Feedback('{self.id}', '{self.comment}', '{self.marks}', '{self.date}')"
+
+class FeedbackManager():
+    @staticmethod
+    def addMarks(feedback, marks):
+        if 0 <= marks <= feedback.component.weightage:
+            feedback.marks = marks
+        else:
+            raise ValueError("Marks must not exceed component weightage")
+
+    @staticmethod
+    def addComment(feedback, comment):
+        if comment:
+            feedback.comment = comment
+        else:
+            raise ValueError("Comment must not be empty")
+
+class iInstructor():
+    @staticmethod
+    def addStudent():
+        pass
+
+    @staticmethod
+    def addStudentCSV():
+        pass
+
+    @staticmethod
+    def addComponent():
+        pass
+
+    @staticmethod
+    def addMarks():
+        pass
+
+    @staticmethod
+    def addMarksCSV():
+        pass
+
+class iStudent():
+    pass
