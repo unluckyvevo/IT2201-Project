@@ -1,4 +1,4 @@
-from readbit import db, login_manager
+from readbit import db, login_manager, bcrypt
 from flask_login import UserMixin
 from datetime import datetime
 import logging
@@ -41,6 +41,19 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.type}', '{self.id}', '{self.username}', '{self.email}')"
+
+class UserManager():
+    @staticmethod
+    def addMod(user, module):
+        if module not in user.mod_list:
+            user.mod_list.append(module)
+        else:
+            raise ValueError("Append failed: Module already exist")
+
+    @staticmethod
+    def changePassword(user, password):
+        hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
+        user.password = hashed_pw
 
 class Student(User):
     frog_list = db.relationship('Frog', backref='owner', lazy=True)
