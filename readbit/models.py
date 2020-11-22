@@ -259,16 +259,34 @@ class ComponentFactory():
         else:
             raise ValueError(f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\'')
 
+
+# Backref(s): component
 class Feedback(db.Model):
     __tablename__ = 'feedback'
 
     id = db.Column(db.Integer, primary_key=True)
     stud_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     inst_id = db.Column(db.Integer, db.ForeignKey(Instructor.id), nullable=False)
-    comp_name = db.Column(db.String(100), db.ForeignKey(MainComp.name), nullable=False)
+    comp_id = db.Column(db.Integer, db.ForeignKey(Component.id), nullable=False)
+    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), unique=True, nullable=False)
     comment = db.Column(db.Text)
     marks = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return f"Feedback('{self.id}', '{self.comment}', '{self.marks}', '{self.date}')"
+
+class FeedbackManager():
+    @staticmethod
+    def addMarks(feedback, marks):
+        if 0 <= marks <= feedback.component.weightage:
+            feedback.marks = marks
+        else:
+            raise ValueError("Marks must not exceed component weightage")
+
+    @staticmethod
+    def addComment(feedback, comment):
+        if comment:
+            feedback.comment = comment
+        else:
+            raise ValueError("Comment must not be empty")
