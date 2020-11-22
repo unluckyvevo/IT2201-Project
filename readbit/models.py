@@ -151,6 +151,19 @@ class ClassManager():
         for frog in module_class.frog_list:
             FrogManager.updateState(frog)
 
+    @staticmethod
+    def addStudent(module_class, student):
+        if student not in module_class.stud_list and len(module_class.stud_list) < module_class.class_size:
+            module_class.stud_list.append(student)
+            for frog in student.frog_list:
+                if frog.mod_name == module_class.module.mod_name:
+                    module_class.frog_list.append(frog)
+                    break
+        else:
+            raise ValueError("Append failed: Student already exist")
+
+
+
 
 # Backref(s): owner
 class Frog(db.Model):
