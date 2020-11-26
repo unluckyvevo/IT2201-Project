@@ -127,7 +127,7 @@ class ModuleManager():
         if total <= 100:
             module.comp_list.append(main_component)
         else:
-            raise ValueError("Append failed: Total component weightage exceeds 100")
+            return "Error: Module weightage exceeds 100%"
 
 
 
@@ -246,7 +246,7 @@ class ComponentManager():
         if total <= main_comp.weightage:
             main_comp.sub_comp_list.append(sub_comp)
         else:
-            raise ValueError("Append failed: Total sub-comp weightage exceeds main-comp")
+            return "Error: Total sub-component weightage exceeds main-component's weightage"
 
 
 class ComponentFactory():
@@ -254,10 +254,12 @@ class ComponentFactory():
     def createComponent(type, name, weightage, **kwargs):
         if type == 'main':
             module_id = kwargs.get('module_id')
-            return MainComp(name=name, weightage=weightage, type=type, module_id=module_id)
+            return MainComp(name=name, weightage=weightage, type=type)
+            #return MainComp(name=name, weightage=weightage, type=type, module_id=module_id)
         elif type == 'sub':
             main_comp_id = kwargs.get('main_comp_id')
-            return SubComp(name=name, weightage=weightage, type=type, main_comp_id=main_comp_id)
+            return SubComp(name=name, weightage=weightage, type=type)
+            #return SubComp(name=name, weightage=weightage, type=type, main_comp_id=main_comp_id)
         else:
             raise ValueError(f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\'')
 
@@ -302,9 +304,30 @@ class iInstructor():
     def addStudentCSV():
         pass
 
+    # iInstructor.addComponent(module, form.main_comps.data)
     @staticmethod
-    def addComponent():
-        pass
+    def addComponent(module, components):
+        original = module
+        for main in components:
+            main_comp = ComponentFactory.createComponent(type='main', name=main['comp_name'],
+                                                    weightage=main['weightage'], module_id=module.id)
+            error = ModuleManager.addComponent(module, main_comp)
+
+            if error:
+                module = original
+                return error
+
+            for sub in main['sub_comps']:
+                sub_comp = ComponentFactory.createComponent(type='sub', name=sub['comp_name'],
+                                                            weightage=sub['weightage'])
+                error = ComponentManager.addSubComp(main_comp, sub_comp)
+
+                if error:
+                    module = original
+                    return error
+
+        db.session.commit()
+
 
     @staticmethod
     def addMarks():

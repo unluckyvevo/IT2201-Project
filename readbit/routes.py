@@ -3,7 +3,7 @@ from readbit import *
 from readbit.forms import *
 from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
-import typing, logging
+import typing, logging, pprint
 from flask import request
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,13 +39,8 @@ def login():
 
 @app.route('/module_list')
 def module_list():
-    """
-    Added by Dylan Woo
-    Student cannot manage modules
-    """
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    # modulelist: typing.List[int] = [1,2,3,4,5,6,7]
 
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
 
@@ -71,10 +66,6 @@ def manage_feedback():
 
 @app.route('/manage_class')
 def manage_class():
-    """
-    Added by Dylan Woo
-    Student cannot manage modules
-    """
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
 
@@ -158,6 +149,7 @@ def add_component():
 
     form = AddComponentForm()
     modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
 
     if form.add_main.data:
         form.main_comps.append_entry()
@@ -168,7 +160,11 @@ def add_component():
             main.sub_comps.append_entry()
             return render_template('add_component.html', title='Add Component', form=form, modid=modid)
 
-    # if form.validate_on_submit():
-    #     # do something with data
+    if form.validate_on_submit():
+        error = iInstructor.addComponent(module, form.main_comps.data)
+        if error:
+            flash(error, 'danger')
+        else:
+            return redirect(url_for('manage_module', mod_id=modid, success=True))
 
     return render_template('add_component.html', title='Add Component', form=form, modid=modid)
