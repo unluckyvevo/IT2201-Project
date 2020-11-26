@@ -95,13 +95,8 @@ def manage_module():
 
     modid = request.args.get('mod_id')
     module = Module.query.filter_by(id=modid).first()
-    comp_list = []
-    for comp in module.comp_list:
-        comp_list.append(comp)
-        for sub in comp.sub_comp_list:
-            comp_list.append(sub)
 
-    return render_template('manage_module.html', title='Manage Module', module=module, components=comp_list)
+    return render_template('manage_module.html', title='Manage Module', module=module, components= module.comp_list)
 
 @app.route('/add_student_manually')
 def add_student_manually():
