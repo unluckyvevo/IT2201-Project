@@ -64,13 +64,20 @@ def manage_feedback():
     return render_template('manage_feedback.html', title='Manage Feedback', module_name=module_name, component_name=component_name, teaching_classlist=teaching_classlist)
 
 
-@app.route('/manage_class')
+@app.route('/manage_class', methods=['GET', 'POST'])
 def manage_class():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
 
-    teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
-    return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
+    module = Module.query.filter_by(id=request.args.get('mod_id')).first()
+
+    if request.method == "POST":
+        selected_class = request.form['class_select']
+        student_list = iInstructor.viewClass(selected_class, module)
+        return render_template('manage_class.html', title='Manage Class', selected=selected_class,
+                               class_list=module.class_list, stud_list=student_list)
+
+    return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
 
 @app.route('/logout')
 def logout():

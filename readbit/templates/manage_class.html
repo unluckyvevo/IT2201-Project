@@ -7,17 +7,23 @@
     <div class="row" id="class_ddl_row">
         <label id="filter_class_label" for="filter_class_ddl">Class: </label>
         <form method="post">
-
-        <select id="filter_class_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
-            <option disabled selected value> -- select an option -- </option>
-          {% for class in teaching_classlist %}
-            <option value="{{ class }}">{{ class }}</option>
-          {% endfor %}
+        <select id="filter_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
+            {% if selected is not defined %}
+                <option disabled selected value> -- select an option -- </option>
+            {% else %}
+                <option disabled value> -- select an option -- </option>
+            {% endif %}
+            {% for class in class_list %}
+                {% if selected is defined and class.class_name == selected %}
+                    <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
+                {% else %}
+                    <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
         </form>
     </div>
     <div class="row" id="manage_class_row2">
-        <!-- <a href="{{ url_for('class_dashboard')}}" class="btn btn-info">View Class List</a> -->
         <button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_student_modal">
           +
         </button>
@@ -68,12 +74,17 @@
             </tr>
           </thead>
           <tbody>
-              <tr>
-                  <td>student1</td>
-                  <td>80</td>
-                  <td>A</td>
-                  <td class="text-center" id="manage_class_button_col"><a href="{{ url_for('view_student') }}" class="btn btn-info">View</a></td>
-              </tr>
+            {% if stud_list is defined %}
+                {% for student in stud_list %}
+                    <tr>
+                        <td>{{ student['name'] }}</td>
+                        <td>{{ student['marks'] }}</td>
+                        <td>{{ student['grade'] }}</td>
+                        <td class="text-center" id="manage_class_button_col"><a href="{{ url_for('view_student') }}"
+                                                                                class="btn btn-info">View</a></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
           </tbody>
         </table>
     </div>

@@ -64,6 +64,31 @@ class Student(User):
         'polymorphic_identity': 'student'
     }
 
+class StudentManager():
+    @staticmethod
+    def getGrade(student, module):
+        total = 0
+        grade = ''
+
+        for feedback in student.feedback_list:
+            if feedback.mod_name == module.mod_name:
+                total += feedback.marks
+
+        if total >= 80:
+            grade = 'A'
+        elif total >= 70:
+            grade = 'B'
+        elif total >= 60:
+            grade = 'C'
+        elif total >= 50:
+            grade = 'D'
+        else:
+            grade = 'F'
+
+        return {'marks' : total, 'grade' : grade}
+
+
+
 
 class Instructor(User):
     class_list = db.relationship('ModuleClass', secondary=class_list, lazy='subquery',
@@ -328,6 +353,17 @@ class iInstructor():
 
         db.session.commit()
 
+    @staticmethod
+    def viewClass(class_name, module):
+        student_list = []
+        for mod_class in module.class_list:
+            if mod_class.class_name == class_name:
+                for student in mod_class.stud_list:
+                    stud_info = StudentManager.getGrade(student, module)
+                    stud_info['name'] = student.username
+                    student_list.append(stud_info)
+                break
+        return student_list
 
     @staticmethod
     def addMarks():
