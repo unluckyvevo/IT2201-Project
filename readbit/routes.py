@@ -3,7 +3,7 @@ from readbit import *
 from readbit.forms import *
 from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
-import typing, logging
+import typing, logging, pprint
 from flask import request
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,13 +39,8 @@ def login():
 
 @app.route('/module_list')
 def module_list():
-    """
-    Added by Dylan Woo
-    Student cannot manage modules
-    """
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    # modulelist: typing.List[int] = [1,2,3,4,5,6,7]
 
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
 
@@ -69,17 +64,20 @@ def manage_feedback():
     return render_template('manage_feedback.html', title='Manage Feedback', module_name=module_name, component_name=component_name, teaching_classlist=teaching_classlist)
 
 
-@app.route('/manage_class')
+@app.route('/manage_class', methods=['GET', 'POST'])
 def manage_class():
-    """
-    Added by Dylan Woo
-    Student cannot manage modules
-    """
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
 
-    teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
-    return render_template('manage_class.html', title='Manage Class', teaching_classlist=teaching_classlist)
+    module = Module.query.filter_by(id=request.args.get('mod_id')).first()
+
+    if request.method == "POST":
+        selected_class = request.form['class_select']
+        student_list = iInstructor.viewClass(selected_class, module)
+        return render_template('manage_class.html', title='Manage Class', selected=selected_class,
+                               class_list=module.class_list, stud_list=student_list)
+
+    return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
 
 @app.route('/logout')
 def logout():
@@ -96,26 +94,16 @@ Added by Dylan Woo
 """
 @app.route('/manage_module')
 def manage_module():
-    """
-        Student cannot manage modules
-    """
     if current_user.type == 'student':
             return redirect(url_for('student_dashboard'))
 
-    modid = request.args.get('mod_id')
-    module = Module.query.filter_by(id=modid).first().mod_name
-    assessments: typing.List[typing.Dict] = [{
-        "Quiz 1": {
-            "Weightage": "5%",
-            "Date": "20/10/2020"
-        },
+    if request.args.get('success'):
+        flash('Component added successfully.', 'success')
 
-        "Quiz 2": {
-            "Weightage": "5%",
-            "Date": "20/10/2020"
-        }
-    }]
-    return render_template('manage_module.html', title='Manage Module', assessments=assessments, modid=modid, modname=module)
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    return render_template('manage_module.html', title='Manage Module', module=module, components= module.comp_list)
 
 @app.route('/add_student_manually')
 def add_student_manually():
@@ -163,6 +151,7 @@ def add_component():
 
     form = AddComponentForm()
     modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
 
     if form.add_main.data:
         form.main_comps.append_entry()
@@ -173,7 +162,11 @@ def add_component():
             main.sub_comps.append_entry()
             return render_template('add_component.html', title='Add Component', form=form, modid=modid)
 
-    # if form.validate_on_submit():
-    #     # do something with data
+    if form.validate_on_submit():
+        error = iInstructor.addComponent(module, form.main_comps.data)
+        if error:
+            flash(error, 'danger')
+        else:
+            return redirect(url_for('manage_module', mod_id=modid, success=True))
 
     return render_template('add_component.html', title='Add Component', form=form, modid=modid)

@@ -12,26 +12,64 @@
                         <div class="form-group">
                             {% for main in form.main_comps %}
                                 <div class="form-group"><hr>
+                                    {{ main.hidden_tag() }}
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            {{ main.comp_name(class="form-control") }}
+                                            {% if main.comp_name.errors %}
+                                                {{ main.comp_name(class="form-control is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in main.comp_name.errors %}
+                                                    <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                 {{ main.comp_name(class="form-control") }}
+                                            {% endif %}
                                         </div>
                                         <div class="col-sm-6">
-                                            {{ main.weightage(class="form-control") }}
+                                            {% if main.weightage.errors %}
+                                                {{ main.weightage(class="form-control is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in main.weightage.errors %}
+                                                    <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% else %}
+                                                 {{ main.weightage(class="form-control") }}
+                                            {% endif %}
                                         </div>
 
                                     </div>
                                 </div>
                                  <div class="form-group">
                                      {% for sub in main.sub_comps %}
+                                        {{ sub.hidden_tag() }}
                                          <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-2 text-right"><img class="responsive" src="{{url_for('static', filename='frog_state_1.png')}}" alt="-->" width=25/></div>
                                                 <div class="col-sm-5 pl-0">
-                                                    {{ sub.comp_name(class="form-control form-control-sm") }}
+                                                    {% if sub.comp_name.errors %}
+                                                        {{ sub.comp_name(class="form-control form-control-sm is-invalid") }}
+                                                        <div class="invalid-feedback">
+                                                            {% for error in sub.comp_name.errors %}
+                                                            <span>{{ error }}</span>
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% else %}
+                                                         {{ sub.comp_name(class="form-control form-control-sm") }}
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-sm-5 pl-0">
-                                                    {{ sub.weightage(class="form-control form-control-sm")}}
+                                                    {% if sub.weightage.errors %}
+                                                        {{ sub.weightage(class="form-control form-control-sm is-invalid") }}
+                                                        <div class="invalid-feedback">
+                                                            {% for error in sub.weightage.errors %}
+                                                            <span>{{ error }}</span>
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% else %}
+                                                         {{ sub.weightage(class="form-control form-control-sm") }}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -46,7 +84,6 @@
                 </fieldset>
                 <div class="form-group">
                     {{ form.add_main(class="btn btn-outline-info", formnovalidate=True) }}
-
                 </div>
         </div>
     </div>
