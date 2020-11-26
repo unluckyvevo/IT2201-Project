@@ -96,26 +96,21 @@ Added by Dylan Woo
 """
 @app.route('/manage_module')
 def manage_module():
-    """
-        Student cannot manage modules
-    """
     if current_user.type == 'student':
             return redirect(url_for('student_dashboard'))
 
-    modid = request.args.get('mod_id')
-    module = Module.query.filter_by(id=modid).first().mod_name
-    assessments: typing.List[typing.Dict] = [{
-        "Quiz 1": {
-            "Weightage": "5%",
-            "Date": "20/10/2020"
-        },
+    if request.args.get('success'):
+        flash('Component added successfully.', 'success')
 
-        "Quiz 2": {
-            "Weightage": "5%",
-            "Date": "20/10/2020"
-        }
-    }]
-    return render_template('manage_module.html', title='Manage Module', assessments=assessments, modid=modid, modname=module)
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
+    comp_list = []
+    for comp in module.comp_list:
+        comp_list.append(comp)
+        for sub in comp.sub_comp_list:
+            comp_list.append(sub)
+
+    return render_template('manage_module.html', title='Manage Module', module=module, components=comp_list)
 
 @app.route('/add_student_manually')
 def add_student_manually():
