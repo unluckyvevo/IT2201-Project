@@ -7,18 +7,24 @@
          <h2 class="m-4">Add Marks to {{ module }} - {{ component }}</h2>
      </div>
      <div  style="display: flex; align-items: center; justify-content: center;">
-        <label id="filter_class_label" style="font-weight: bold;" id="add_marks_ddl">Class: </label>
-        <form method="post"> 
-            <select id="add_marks_ddl" name = "value_filter" class="form-control" onchange="">
-            <option disabled selected value> -- select an option -- </option>
-            {% for class in teaching_classlist %}
-            <option value="{{ class }}">{{ class }}</option>
-            {% endfor %}
-        </select>
-        </form>
+
      </div>
      <div style="display: flex; align-items: center; justify-content: center;">
          <div class="col-sm-5">
+
+            <form method="post"><label id="filter_class_label" style="font-weight: bold;" id="add_marks_ddl">Class: </label>
+                <select id="add_marks_ddl" name = "value_filter" class="form-control" onchange="">
+                <option disabled selected value> -- select an option -- </option>
+                {% for class in teaching_classlist %}
+                <option value="{{ class }}">{{ class }}</option>
+                {% endfor %}
+                </select>
+            </form>
+            <div class="custom-file mt-3">
+                <input type="file" class="custom-file-input" id="validatedCustomFile">
+                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                <div class="invalid-feedback">Example invalid custom file feedback</div>
+            </div>
             <table class="table table-bordered table-striped mt-3" id="add_marks_table">
             <thead>
                 <tr class="text-center">

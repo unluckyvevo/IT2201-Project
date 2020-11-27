@@ -72,3 +72,10 @@ table{
 {
     display: flex; justify-content: space-between;
 }
+.manage_module_component{
+    text-indent: 20px;
+    font-weight: 500;
+}
+.manage_module_subcomponent{
+     text-indent: 35px;
+}
