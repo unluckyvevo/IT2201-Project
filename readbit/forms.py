@@ -26,4 +26,3 @@ class AddComponentForm(FlaskForm):
     main_comps = FieldList(FormField(MainComponentForm), label='Main Component', min_entries=1)
     add_main = SubmitField(label='Add Main Component')
     submit = SubmitField('Submit Components')
-

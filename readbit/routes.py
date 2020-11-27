@@ -69,13 +69,17 @@ def manage_class():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
 
-    module = Module.query.filter_by(id=request.args.get('mod_id')).first()
+    if request.args.get('success'):
+        flash('Student added successfully.', 'success')
+
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
 
     if request.method == "POST":
         selected_class = request.form['class_select']
         student_list = iInstructor.viewClass(selected_class, module)
         return render_template('manage_class.html', title='Manage Class', selected=selected_class,
-                               class_list=module.class_list, stud_list=student_list)
+                               class_list=module.class_list, stud_list=student_list, mod_id=modid)
 
     return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
 
@@ -105,10 +109,25 @@ def manage_module():
 
     return render_template('manage_module.html', title='Manage Module', module=module, components= module.comp_list)
 
-@app.route('/add_student_manually')
+@app.route('/add_student_manually', methods=['GET', 'POST'])
 def add_student_manually():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
+
+    modid = request.args.get('mod_id')
+    selected = request.args.get('class')
+
+    if request.method == "POST":
+        stud_id = request.form['student_id']
+        stud_name = request.form['student_name']
+        stud_email = request.form['student_email']
+        stud_info = {'id' : stud_id, 'name' : stud_name, 'email' : stud_email}
+        error = iInstructor.addStudent(modid, selected, stud_info)
+        if error:
+            flash(error, 'danger')
+        else:
+            return redirect(url_for('manage_class', mod_id=modid, success=True))
+
     return render_template('add_student_manually.html', title='Add Student Manually')
 
 @app.route('/student_dashboard')
