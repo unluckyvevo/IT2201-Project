@@ -79,3 +79,10 @@ table{
 .manage_module_subcomponent{
      text-indent: 35px;
 }
+.add_student_download_btn
+{
+    font-size:15px;
+    /*min-height: 100%;*/
+    vertical-align: sub;
+    /*min-width: 100%;*/
+}

@@ -3,30 +3,35 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_class.css') }}">
 
 <h1>Class List</h1>
-<div class="container">
-    <div class="row" id="class_ddl_row">
-        <label id="filter_class_label" for="filter_class_ddl">Class: </label>
-        <form method="post">
-        <select id="filter_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
-            {% if selected is not defined %}
-                <option disabled selected value> -- select an option -- </option>
-            {% else %}
-                <option disabled value> -- select an option -- </option>
-            {% endif %}
-            {% for class in class_list %}
-                {% if selected is defined and class.class_name == selected %}
-                    <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
-                {% else %}
-                    <option value="{{ class.class_name }}">{{ class.class_name }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        </form>
-    </div>
-    <div class="row" id="manage_class_row2">
+<div class="container mt-3">
+    <div class="row d-flex justify-content-between" id="class_ddl_row">
         <button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_student_modal">
-          Add Student
-        </button>
+              Add Student
+            </button>
+    <div class="row">
+        <label id="filter_class_label" for="filter_class_ddl">Class: </label>
+            <form method="post">
+            <select id="filter_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
+                {% if selected is not defined %}
+                    <option disabled selected value> -- select an option -- </option>
+                {% else %}
+                    <option disabled value> -- select an option -- </option>
+                {% endif %}
+                {% for class in class_list %}
+                    {% if selected is defined and class.class_name == selected %}
+                        <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
+                    {% else %}
+                        <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            </form>
+    </div>
+
+    </div>
+
+    <div class="row" id="manage_class_row2">
+
         <div class="modal fade" id="add_student_modal" tabindex="-1" role="dialog" aria-labelledby="add_student_modal_label" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -35,17 +40,25 @@
               </div>
               <div class="modal-body">
                   <div class="row m-2" id="modal_buttons">
-                      <a href="{{ url_for('add_student_manually', class=selected, mod_id=mod_id) }}" class="btn btn-info m-2">Add Manually</a>
+                      <a href="{{ url_for('add_student_manually') }}" class="btn btn-info m-2">Add Manually</a>
                   </div>
                   <div class="row ml-3 mt-3">
                       Upload Excel Sheet (.csv)
                   </div>
                         <form action="">
-                             <div class="row ml-2">
-                                <input class="border overflow-auto m-2" type="file" accept=".xls,.xlsx,.csv" id="file_upload_box" name="filename">
-                             </div>
+
                             <div class="row m-2" id="modal_submit_row">
-                                <button type="submit" class="btn btn-info m-1 mt-3" data-toggle="modal" >Submit</button>
+                                <input class="border overflow-auto m-2" type="file" accept=".xls,.xlsx,.csv" id="file_upload_box" name="filename">
+
+                                <div class="col-sm-8">
+                                    <a type="button"  class="btn btn-info add_student_download_btn mt-3" href="../static/Readbit_Add_Student.csv" download="Readbit_Add_Student.csv">Download Template</a>
+
+                                </div>
+                                 <div class="col-sm-4 d-flex justify-content-end">
+                                     <button type="submit" class="btn btn-info mt-3" data-toggle="modal" >Submit</button>
+                                </div>
+
+
                             </div>
                         </form>
                     </div>

@@ -53,3 +53,10 @@ display: block;
 {
     width: 500px;
 }
+.add_marks_download_btn
+{
+    font-size:14px;
+    min-height: 100%;
+    vertical-align: sub;
+    min-width: 100%;
+}
