@@ -26,3 +26,9 @@ class AddComponentForm(FlaskForm):
     main_comps = FieldList(FormField(MainComponentForm), label='Main Component', min_entries=1)
     add_main = SubmitField(label='Add Main Component')
     submit = SubmitField('Submit Components')
+
+class AddStudentForm(FlaskForm):
+    student_id = StringField('Student ID', validators=[DataRequired(), Length(max=100)])
+    student_name = StringField('Student Name', validators=[DataRequired(), Length(max=100)])
+    student_email = StringField('Student Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Add Student')

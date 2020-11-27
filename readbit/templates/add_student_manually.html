@@ -4,30 +4,58 @@
 
 <h2>Add student</h2>
 <form method="post">
-<div class="content-section p-3" id="manage_class_container">
-    <div class="form-group row">
-        <label for="student_id_txtbox" class="col-sm-4 col-form-label txtboxlabels">Student ID:</label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" id="student_id_txtbox" name="student_id" value="" required>
+    {{ form.hidden_tag() }}
+    <div class="content-section p-3" id="manage_class_container">
+        <div class="form-group row">
+            {{ form.student_id.label(class="form-control-label") }}
+             <div class="col-sm-8">
+            {% if form.student_id.errors %}
+                {{ form.student_id(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.student_id.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                 {{ form.student_id(class="form-control") }}
+            {% endif %}
+             </div>
+        </div>
+        <div class="form-group row">
+            {{ form.student_name.label(class="form-control-label") }}
+             <div class="col-sm-8">
+            {% if form.student_name.errors %}
+                {{ form.student_name(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.student_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                 {{ form.student_name(class="form-control") }}
+            {% endif %}
+             </div>
+        </div>
+        <div class="form-group row">
+            {{ form.student_email.label(class="form-control-label") }}
+             <div class="col-sm-8">
+            {% if form.student_email.errors %}
+                {{ form.student_email(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.student_email.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                 {{ form.student_email(class="form-control") }}
+            {% endif %}
+             </div>
+        </div>
+        <div class="row mr-1" id="add_student_btn_row">
+            <a href="{{ url_for('manage_class') }}" class="btn btn-secondary m-2 ml-3">Back</a>
+            {{ form.submit(class="btn btn-primary mb-2") }}
         </div>
     </div>
-    <div class="form-group row">
-        <label for="student_name_txtbox" class="col-sm-4 col-form-label txtboxlabels">Student Name: </label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" id="student_name_txtbox" name="student_name" value="" required>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="student_email_txtbox" class="col-sm-4 col-form-label txtboxlabels">Student Email: </label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" id="student_email_txtbox" name="student_email" value="" required>
-        </div>
-    </div>
-    <div class="row mr-1" id="add_student_btn_row">
-        <a href="{{ url_for('manage_class') }}" class="btn btn-secondary m-2 ml-3">Back</a>
-        <button type="submit" class="btn btn-primary mb-2">Add Student</button>
-    </div>
-</div>
 
 </form>
 
