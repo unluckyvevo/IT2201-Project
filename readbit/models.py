@@ -68,7 +68,6 @@ class StudentManager():
     @staticmethod
     def getGrade(student, module):
         total = 0
-        grade = ''
 
         for feedback in student.feedback_list:
             if feedback.mod_name == module.mod_name:
@@ -180,11 +179,11 @@ class ClassManager():
     @staticmethod
     def addStudent(module_class, student):
         if student in module_class.stud_list:
-            raise ValueError("Append failed: Student is already registered in the class")
+            return "Error: Student is already registered in the class"
         elif len(module_class.stud_list) >= module_class.class_size:
-            raise ValueError("Append failed: Class is already full")
+            return "Error: Class is already full"
         elif module_class.module in student.mod_list:
-            raise ValueError("Append failed: Student is already in another class")
+            return "Error: Student is already in another class"
         else:
             frog = Frog(student_id=student.id, class_id=module_class.id, mod_name=module_class.module.mod_name)
             module_class.frog_list.append(frog)
@@ -321,9 +320,25 @@ class FeedbackManager():
             raise ValueError("Comment must not be empty")
 
 class iInstructor():
+    #  iInstructor.addStudent(modid, selected, stud_info)
     @staticmethod
-    def addStudent():
-        pass
+    def addStudent(module_id, class_name, student_info):
+        student = Student.query.filter_by(id=student_info['id']).first()
+        if student:
+            if student.email == student_info['email'] and student.username == student_info['name']:
+                module = Module.query.filter_by(id=module_id).first()
+                for mod_class in module.class_list:
+                    if mod_class.class_name == class_name:
+                        error = ClassManager.addStudent(mod_class, student)
+                        if error:
+                            return error
+                        break
+            else:
+                return "Error: Student particulars are incorrect"
+        else:
+            return "Error: Student ID is incorrect"
+
+        db.session.commit()
 
     @staticmethod
     def addStudentCSV():

@@ -69,13 +69,17 @@ def manage_class():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
 
-    module = Module.query.filter_by(id=request.args.get('mod_id')).first()
+    if request.args.get('success'):
+        flash('Student added successfully.', 'success')
+
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
 
     if request.method == "POST":
         selected_class = request.form['class_select']
         student_list = iInstructor.viewClass(selected_class, module)
         return render_template('manage_class.html', title='Manage Class', selected=selected_class,
-                               class_list=module.class_list, stud_list=student_list)
+                               class_list=module.class_list, stud_list=student_list, mod_id=modid)
 
     return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
 
@@ -105,11 +109,25 @@ def manage_module():
 
     return render_template('manage_module.html', title='Manage Module', module=module, components= module.comp_list)
 
-@app.route('/add_student_manually')
+@app.route('/add_student_manually', methods=['GET', 'POST'])
 def add_student_manually():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    return render_template('add_student_manually.html', title='Add Student Manually')
+
+    form = AddStudentForm()
+
+    modid = request.args.get('mod_id')
+    selected = request.args.get('class')
+
+    if form.validate_on_submit():
+        stud_info = {'id' : form.student_id.data, 'name' : form.student_name.data, 'email' : form.student_email.data}
+        error = iInstructor.addStudent(modid, selected, stud_info)
+        if error:
+            flash(error, 'danger')
+        else:
+            return redirect(url_for('manage_class', mod_id=modid, success=True))
+
+    return render_template('add_student_manually.html', title='Add Student Manually', form=form)
 
 @app.route('/student_dashboard')
 def student_dashboard():
