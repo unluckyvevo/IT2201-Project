@@ -83,6 +83,35 @@ def manage_class():
 
     return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
 
+@app.route('/add_marks', methods=['GET', 'POST'])
+def add_marks():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
+
+    modid = request.args.get('mod_id')
+    comp_id = request.args.get('comp_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    form = AddMarksFormSet()
+
+    if form.validate_on_submit():
+        print("VALIDATED")
+
+    if request.method == "POST" and 'class_select' in request.form:
+        selected_class = request.form['class_select']
+        student_list = iInstructor.viewClass(selected_class, module, comp_id=comp_id)
+
+        if 'submit2' not in request.form:
+            for stud in student_list:
+                stud['student_name'] = stud.pop('name')
+                form.marks_set.append_entry(stud)
+
+        return render_template('add_marks.html', title='Add Marks', selected=selected_class,
+                               class_list=module.class_list, mod_id=modid, form=form)
+
+
+    return render_template('add_marks.html', title='Add Marks', class_list=module.class_list, form=form)
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -144,15 +173,6 @@ def class_dashboard():
     #     return redirect(url_for('student_dashboard'))
     classlist: typing.List[int] = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
-
-@app.route('/add_marks')
-def add_marks():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-    teaching_classlist: typing.List[str] = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6']
-    module = 'Module'
-    component = 'Quiz 1'
-    return render_template('add_marks.html', title='Add Marks',teaching_classlist=teaching_classlist, module=module, component=component)
 
 @app.route('/view_student')
 def view_student():

@@ -86,6 +86,15 @@ class StudentManager():
 
         return {'marks' : total, 'grade' : grade}
 
+    @staticmethod
+    def getMarks(student, comp_id):
+        for feedback in student.feedback_list:
+            if feedback.comp_id == comp_id:
+                return {'marks' : feedback.marks}
+        return {'marks': 0}
+
+
+
 
 
 
@@ -369,12 +378,16 @@ class iInstructor():
         db.session.commit()
 
     @staticmethod
-    def viewClass(class_name, module):
+    def viewClass(class_name, module, **kwargs):
         student_list = []
         for mod_class in module.class_list:
             if mod_class.class_name == class_name:
                 for student in mod_class.stud_list:
-                    stud_info = StudentManager.getGrade(student, module)
+                    comp_id = kwargs.get('comp_id')
+                    if comp_id:
+                        stud_info = StudentManager.getMarks(student, comp_id)
+                    else:
+                        stud_info = StudentManager.getGrade(student, module)
                     stud_info['name'] = student.username
                     student_list.append(stud_info)
                 break
