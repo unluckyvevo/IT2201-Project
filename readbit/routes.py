@@ -95,7 +95,12 @@ def add_marks():
     form = AddMarksFormSet()
 
     if form.validate_on_submit():
-        print("VALIDATED")
+        error = iInstructor.addMarks(current_user.id, comp_id, module, request.form['class_select'], form.marks_set.data)
+
+        if error:
+            flash(error, 'danger')
+        else:
+            flash('Marks added successfully.', 'success')
 
     if request.method == "POST" and 'class_select' in request.form:
         selected_class = request.form['class_select']

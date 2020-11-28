@@ -89,7 +89,7 @@ class StudentManager():
     @staticmethod
     def getMarks(student, comp_id):
         for feedback in student.feedback_list:
-            if feedback.comp_id == comp_id:
+            if feedback.comp_id == int(comp_id):
                 return {'marks' : feedback.marks}
         return {'marks': 0}
 
@@ -305,13 +305,13 @@ class Feedback(db.Model):
     stud_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     inst_id = db.Column(db.Integer, db.ForeignKey(Instructor.id), nullable=False)
     comp_id = db.Column(db.Integer, db.ForeignKey(Component.id), nullable=False)
-    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), unique=True, nullable=False)
+    mod_name = db.Column(db.String(100), db.ForeignKey(Module.mod_name), nullable=False)
     comment = db.Column(db.Text)
     marks = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Feedback('{self.id}', '{self.comment}', '{self.marks}', '{self.date}')"
+        return f"Feedback('{self.id}', '{self.stud_id}', '{self.comp_id}', '{self.mod_name}', '{self.comment}', '{self.marks}', '{self.date}')"
 
 class FeedbackManager():
     @staticmethod
@@ -319,14 +319,14 @@ class FeedbackManager():
         if 0 <= marks <= feedback.component.weightage:
             feedback.marks = marks
         else:
-            raise ValueError("Marks must not exceed component weightage")
+            return "Error: Marks must not exceed component weightage"
 
     @staticmethod
     def addComment(feedback, comment):
         if comment:
             feedback.comment = comment
         else:
-            raise ValueError("Comment must not be empty")
+            return "Error: Comment must not be empty"
 
 class iInstructor():
     #  iInstructor.addStudent(modid, selected, stud_info)
@@ -394,8 +394,28 @@ class iInstructor():
         return student_list
 
     @staticmethod
-    def addMarks():
-        pass
+    def addMarks(inst_id, comp_id, module, class_name, marks):
+        for mod_class in module.class_list:
+            if mod_class.class_name == class_name:
+                for student in mod_class.stud_list:
+                    feedback = None
+                    for fb in student.feedback_list:
+                        if fb.comp_id == int(comp_id):
+                            feedback = fb
+                            break
+                    if feedback is None:
+                        feedback = Feedback(stud_id=student.id, inst_id=inst_id,
+                                             comp_id=comp_id, mod_name=module.mod_name, marks=0)
+                    db.session.add(feedback)
+                    db.session.commit()
+                    for mark in marks:
+                        if mark['student_name'] == student.username:
+                            error = FeedbackManager.addMarks(feedback, mark['marks'])
+                            if error:
+                                return error
+                            break
+                db.session.commit()
+                break
 
     @staticmethod
     def addMarksCSV():
