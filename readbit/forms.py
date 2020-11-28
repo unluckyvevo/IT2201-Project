@@ -32,3 +32,11 @@ class AddStudentForm(FlaskForm):
     student_name = StringField('Student Name', validators=[DataRequired(), Length(max=100)])
     student_email = StringField('Student Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Add Student')
+
+class AddMarksForm(FlaskForm):
+    marks = IntegerField('Marks', validators=[validators.InputRequired(), NumberRange(min=0, max=100)])
+    student_name = StringField('Student Name')
+
+class AddMarksFormSet(FlaskForm):
+    marks_set = FieldList(FormField(AddMarksForm))
+    submit2 = SubmitField('Submit')
