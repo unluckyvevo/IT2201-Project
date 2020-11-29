@@ -61,7 +61,7 @@
                     {% if comp.sub_comp_list %}
                         <td class="text-center"><a href="{{ url_for('view_component_scores') }}" class="btn btn-info">View</a></td>
                         <td class="text-center"><button id="add_student_btn" type="button" class="btn btn-secondary"  disabled data-toggle="modal" data-target="#add_assessment_modal">Add Marks</button></td>
-                        <td class="text-center"><a href="{{ url_for('manage_feedback') }}" class="btn btn-info">Feedback</a></td>
+                        <td class="text-center"><a href="{{ url_for('manage_feedback', mod_id=module.id, comp_id=comp.id) }}" class="btn btn-info">Feedback</a></td>
                         {% for sub in comp.sub_comp_list %}
                              <tr>
                                 <td class="manage_module_subcomponent"><img class="responsive" src="{{url_for('static', filename='frog_state_1.png')}}" alt="-->" width=16/>  {{ sub.name }}</td>
@@ -69,14 +69,14 @@
                                 <td class="text-center"><a href="{{ url_for('view_component_scores') }}" class="btn btn-info">View</a></td>
 <!--                                <td class="text-center"><button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_assessment_modal">Add Marks</button></td>-->
                                 <td class="text-center"><a href="{{ url_for('add_marks', mod_id=module.id, comp_id=sub.id) }}" id="add_student_btn" class="btn btn-info" >Add Marks</a></td>
-                                <td class="text-center"><a href="{{ url_for('manage_feedback') }}" class="btn btn-info">Feedback</a></td>
+                                <td class="text-center"><a href="{{ url_for('manage_feedback', mod_id=module.id, comp_id=sub.id) }}" class="btn btn-info">Feedback</a></td>
                             </tr>
                         {% endfor %}
                     {% else %}
                         <td class="text-center"><a href="{{ url_for('view_component_scores') }}" class="btn btn-info">View</a></td>
                         <td class="text-center"><a href="{{ url_for('add_marks', mod_id=module.id, comp_id=comp.id) }}" id="add_student_btn" class="btn btn-info" >Add Marks</a></td>
 <!--                        <td class="text-center"><button id="add_student_btn" type="button" class="btn btn-info" data-toggle="modal" data-target="#add_assessment_modal">Add Marks</button></td>-->
-                        <td class="text-center"><a href="{{ url_for('manage_feedback') }}" class="btn btn-info">Feedback</a></td>
+                        <td class="text-center"><a href="{{ url_for('manage_feedback', mod_id=module.id, comp_id=comp.id) }}" class="btn btn-info">Feedback</a></td>
                     {% endif %}
                 </tr>
             {% endfor %}

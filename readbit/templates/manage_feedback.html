@@ -2,32 +2,43 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
 
-
+<form method="post" action="" id="feedback_form" name="feedback_form">
+    <input type="hidden" name="class_select" value={{selected}}>
+</form>
 <div class="container">
     <div class="row">
-        <h2 class="ml-5">Add feedback for {{ module_name }} | {{ component_name }}</h2>
+        <h2 class="ml-5">Add Feedback to Component</h2>
         <div class="column" id="feedback_column1">
             <div class="row mt-4 ml-5">
-                    <label for="feedback_textarea">New Comment</label>
+                    <label for="feedback_textarea" form="feedback_form">New Comment</label>
                 </div>
                 <div class="row ml-5 mt-3">
                     <div class="form-group w-75">
-                        <textarea class="form-control" id="feedback_textarea" rows="10"></textarea>
+                        <textarea class="form-control" id="feedback_textarea" name="feedback_textarea"
+                                  rows="10" form="feedback_form" required></textarea>
                     </div>
                 </div>
             <div class="row ml-5" id="feedback_submit_button_row">
                 <button class="btn btn-outline-danger" onclick="javascript:history.back()">Back</button>
-                <button name = "submit_comment_btn" type="submit" class="btn btn-success py-0" >Submit</button>
+                <button name = "submit_comment_btn" type="submit" class="btn btn-success py-0" form="feedback_form">Submit</button>
             </div>
             </div>
             <div class="column" id="feedback_column2">
                 <div class="row mt-3 mr-3" id="class_ddl_row">
                 <label id="filter_class_label" for="filter_class_ddl">Class: </label>
-                <form method="post">
-                    <select id="filter_class_ddl" name = "value_filter" class="form-control" onchange="this.form.submit()">
-                    <option disabled selected value> -- select an option -- </option>
-                    {% for class in teaching_classlist %}
-                    <option value="{{ class }}">{{ class }}</option>
+                <form method="post" action="" id="select_class_form">
+                <select id="add_feedback_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
+                    {% if selected is not defined %}
+                        <option disabled selected value> -- select an option -- </option>
+                    {% else %}
+                        <option disabled value> -- select an option -- </option>
+                    {% endif %}
+                    {% for class in class_list %}
+                        {% if selected is defined and class.class_name == selected %}
+                            <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
+                        {% else %}
+                            <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 </form>
@@ -45,26 +56,18 @@
                         </tr>
                     </thead>
                       <tbody>
-                        <tr class="text-center">
-                            <th scope="col">
-                                <form>
-                                    <input type="checkbox" class="feedback_checkboxes" name="student_check_1" id="student_check_box_1">
-                                </form>
-                            </th>
-                            <td>Sxxxxxx</td>
-                            <td>Mark</td>
-                        </tr>
-                        <tr  class="text-center">
-                            <th scope="col">
-                                <form>
-                                    <input type="checkbox" class="feedback_checkboxes" name="student_check_2" id="student_check_box_2">
-                                </form>
-                            </th>
-                            <td>Sxxxxxx</td>
-                            <td>Mark</td>
-                        </tr>
-                          </td>
-
+                        {% if student_list is defined %}
+                            {% for student in student_list %}
+                                <tr class="text-center">
+                                    <th scope="col">
+                                        <input type="checkbox" class="feedback_checkboxes" name="student_check"
+                                               form="feedback_form" value="{{ student['id'] }}">
+                                    </th>
+                                    <td>{{ student['id'] }}</td>
+                                    <td>{{ student['name'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                       </tbody>
 
                   </table>

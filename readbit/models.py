@@ -383,11 +383,15 @@ class iInstructor():
         for mod_class in module.class_list:
             if mod_class.class_name == class_name:
                 for student in mod_class.stud_list:
-                    comp_id = kwargs.get('comp_id')
-                    if comp_id:
-                        stud_info = StudentManager.getMarks(student, comp_id)
+                    stud_info = {}
+                    if kwargs.get('stud_id'):
+                        stud_info['id'] = student.id
                     else:
-                        stud_info = StudentManager.getGrade(student, module)
+                        comp_id = kwargs.get('comp_id')
+                        if comp_id:
+                            stud_info = StudentManager.getMarks(student, comp_id)
+                        else:
+                            stud_info = StudentManager.getGrade(student, module)
                     stud_info['name'] = student.username
                     student_list.append(stud_info)
                 break
@@ -420,6 +424,31 @@ class iInstructor():
     @staticmethod
     def addMarksCSV():
         pass
+
+    @staticmethod
+    def addFeedback(inst_id, comp_id, module, class_name, comment, stud_list):
+        for mod_class in module.class_list:
+            if mod_class.class_name == class_name:
+                for student in mod_class.stud_list:
+                    if str(student.id) in stud_list:
+                        feedback = None
+                        for fb in student.feedback_list:
+                            if fb.comp_id == int(comp_id):
+                                feedback = fb
+                                break
+                        if feedback is None:
+                            feedback = Feedback(stud_id=student.id, inst_id=inst_id,
+                                                comp_id=comp_id, mod_name=module.mod_name, marks=0)
+                        db.session.add(feedback)
+                        db.session.commit()
+
+                        error = FeedbackManager.addComment(feedback,comment)
+                        if error:
+                            return error
+
+                db.session.commit()
+                break
+
 
 class iStudent():
     pass
