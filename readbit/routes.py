@@ -54,16 +54,6 @@ def view_component_scores():
     component_name = "Component"
     return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
-@app.route('/manage_feedback')
-def manage_feedback():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-    module_name: typing.List[str] = "Module"
-    component_name: typing.List[str] ="Component"
-    teaching_classlist: typing.List[str] = ['T1','T2','T3','T4','T5', 'T6']
-    return render_template('manage_feedback.html', title='Manage Feedback', module_name=module_name, component_name=component_name, teaching_classlist=teaching_classlist)
-
-
 @app.route('/manage_class', methods=['GET', 'POST'])
 def manage_class():
     if current_user.type == 'student':
@@ -82,6 +72,37 @@ def manage_class():
                                class_list=module.class_list, stud_list=student_list, mod_id=modid)
 
     return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
+
+@app.route('/manage_feedback', methods=['GET', 'POST'])
+def manage_feedback():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
+
+    modid = request.args.get('mod_id')
+    comp_id = request.args.get('comp_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    if request.method == "POST":
+        selected_class = request.form['class_select']
+        student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
+
+        if 'submit_comment_btn' in request.form:
+            print(request.form.getlist('student_check'))
+            print(request.form)
+
+            error = iInstructor.addFeedback(current_user.id, comp_id, module, request.form['class_select'],
+                                         request.form['feedback_textarea'], request.form.getlist('student_check'))
+
+            if error:
+                flash(error, 'danger')
+            else:
+                flash('Feedback added successfully.', 'success')
+
+
+        return render_template('manage_feedback.html', title='Manage Feedback', selected=selected_class,
+                               class_list=module.class_list, mod_id=modid, student_list=student_list)
+
+    return render_template('manage_feedback.html', title='Manage Feedback', class_list=module.class_list)
 
 @app.route('/add_marks', methods=['GET', 'POST'])
 def add_marks():
