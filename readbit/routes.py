@@ -72,7 +72,7 @@ def manage_class():
         student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
         print(student_list)
 
-        if 'csv-submit' in request.form:
+        if 'csv-submit' in request.form and request.files.get('filename'):
             data = pd.read_csv(request.files['filename'])
             if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
                 success = True
