@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import *
 from wtforms.validators import DataRequired, Email, Length, NumberRange
+from flask_wtf.file import FileField, FileAllowed
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -39,4 +40,5 @@ class AddMarksForm(FlaskForm):
 
 class AddMarksFormSet(FlaskForm):
     marks_set = FieldList(FormField(AddMarksForm))
+    csv_file = FileField(validators=[FileAllowed(['xls','xlsx','csv'])])
     submit2 = SubmitField('Submit')

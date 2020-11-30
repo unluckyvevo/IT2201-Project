@@ -155,20 +155,41 @@ def add_marks():
     module = Module.query.filter_by(id=modid).first()
 
     form = AddMarksFormSet()
-
+    csv_flag = False
     if form.validate_on_submit():
-        error = iInstructor.addMarks(current_user.id, comp_id, module, request.form['class_select'], form.marks_set.data)
-
-        if error:
-            flash(error, 'danger')
+        if form.csv_file.data:
+            data = pd.read_csv(form.csv_file.data)
+            if {'Student ID', 'Marks'}.issubset(data.columns):
+                marks_set = []
+                for index, row in data.iterrows():
+                    marks_set.append({'student_id' : row['Student ID'], 'marks' : row['Marks']})
+                error = iInstructor.addMarks(current_user.id, comp_id, module, request.form['class_select'],
+                                             marks_set, True)
+                if error:
+                    flash(error, 'danger')
+                else:
+                    flash('Marks added successfully.', 'success')
+                    csv_flag = True
+            else:
+                flash('Error: Incorrect file format. Please refer to the template.', 'danger')
         else:
-            flash('Marks added successfully.', 'success')
+            error = iInstructor.addMarks(current_user.id, comp_id, module, request.form['class_select'],
+                                         form.marks_set.data, False)
+            if error:
+                flash(error, 'danger')
+            else:
+                flash('Marks added successfully.', 'success')
+
 
     if request.method == "POST" and 'class_select' in request.form:
         selected_class = request.form['class_select']
         student_list = iInstructor.viewClass(selected_class, module, comp_id=comp_id)
 
-        if 'submit2' not in request.form:
+        if 'submit2' not in request.form or csv_flag:
+            if csv_flag:
+                for _ in range (len(form.marks_set)):
+                    form.marks_set.pop_entry()
+                    
             for stud in student_list:
                 stud['student_name'] = stud.pop('name')
                 form.marks_set.append_entry(stud)

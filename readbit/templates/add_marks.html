@@ -2,92 +2,88 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='manage_feedback.css') }}">
 
- <div class="container">
-     <div class="text-center">
-         <h2 class="m-">Add Marks To Component</h2>
-     </div>
-     <div  style="display: flex; align-items: center; justify-content: center;">
+<div class="container">
+    <div class="text-center">
+        <h2 class="m-">Add Marks To Component</h2>
+    </div>
+    <div  style="display: flex; align-items: center; justify-content: center;">
 
-     </div>
-     <div style="display: flex; align-items: center; justify-content: center;">
-     <div class="row">
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <div class="row">
 
 
-     </div>
-         <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6">
 
             <label id="filter_class_label" for="filter_class_ddl" style="font-weight: bold">Class: </label>
             <form method="post" action="" id="select_class_form">
-            <select id="add_marks_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
-                {% if selected is not defined %}
+                <select id="add_marks_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
+                    {% if selected is not defined %}
                     <option disabled selected value> -- select an option -- </option>
-                {% else %}
-                    <option disabled value> -- select an option -- </option>
-                {% endif %}
-                {% for class in class_list %}
-                    {% if selected is defined and class.class_name == selected %}
-                        <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
                     {% else %}
-                        <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                    <option disabled value> -- select an option -- </option>
                     {% endif %}
-                {% endfor %}
-            </select>
-            </form>
-         <div class="row mt-3">
-             <div class="col-sm-8">
-             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="validatedCustomFile">
-                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                <div class="invalid-feedback">Example invalid custom file feedback</div>
-            </div>
-         </div>
-         <div class="col-sm-6 text-right mt-1">
-            <a type="button"  class="btn btn-info add_marks_download_btn" href="../static/Readbit_Add_Marks.csv" download="Readbit_Add_Student.csv">Download Template</a>
-
-         </div>
-         </div>
-        {% if form is defined %}
-         <form method="POST" action="" id="add_marks_form">
-             {{ form.hidden_tag() }}
-             <input type="hidden" name="class_select" value={{selected}}>
-            <table class="table table-bordered table-striped mt-3" id="add_marks_table">
-            <thead>
-                <tr class="text-center">
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Marks</th>
-                </tr>
-            </thead>
-                <tbody>
-                    {% for student in form.marks_set %}
-                        {{ student.hidden_tag() }}
-                        <tr class="text-center">
-                            <td>{{ student.student_name.data}} {{ student.student_name(type="hidden")}}</td>
-                            {% if student.marks.errors %}
-                                <td>
-                                    {{ student.marks(class="form-control form-control-sm is-invalid text-center") }}
-
-                                    <div class="invalid-feedback">
-                                    {% for error in student.marks.errors %}
-                                    <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                                </td>
-
-                            {% else %}
-                                 <td>{{ student.marks(class="form-control form-control-sm text-center") }} </td>
-                            {% endif %}
-
-                        </tr>
+                    {% for class in class_list %}
+                    {% if selected is defined and class.class_name == selected %}
+                    <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
+                    {% else %}
+                    <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                    {% endif %}
                     {% endfor %}
-                </tbody>
-            </table>
-             <div class="row add_marks_btn_row m-1">
-                 <button class="btn btn-outline-danger" onclick="javascript:history.back()">Back</button>
-                 {{ form.submit2(class="btn btn-success") }}
-             </div>
-         </form>
-        {% endif %}
+                </select>
+            </form>
+            {% if form is defined %}
+            <form method="POST" action="" id="add_marks_form" name="add_marks_form" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        {{ form.csv_file(class="border overflow-auto", accept=".xls,.xlsx,.csv") }}
+                    </div>
+                    <div class="col-sm-6 text-right mt-1">
+                        <a type="button"  class="btn btn-info add_marks_download_btn" href="../static/Readbit_Add_Marks.csv" download="Readbit_Add_Student.csv">Download Template</a>
+
+                    </div>
+                </div>
+                <input type="hidden" name="class_select" value={{selected}}>
+                <table class="table table-bordered table-striped mt-3" id="add_marks_table">
+                    <thead>
+                    <tr class="text-center">
+                        <th scope="col">Student Name</th>
+                        <th scope="col">Marks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in form.marks_set %}
+                    {{ student.hidden_tag() }}
+                    <tr class="text-center">
+                        <td>{{ student.student_name.data}} {{ student.student_name(type="hidden")}}</td>
+                        {% if student.marks.errors %}
+                        <td>
+                            {{ student.marks(class="form-control form-control-sm is-invalid text-center") }}
+
+                            <div class="invalid-feedback">
+                                {% for error in student.marks.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+
+                        {% else %}
+                        <td>{{ student.marks(class="form-control form-control-sm text-center") }} </td>
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row add_marks_btn_row m-1">
+                    <button class="btn btn-outline-danger" onclick="javascript:history.back()">Back</button>
+                    {{ form.submit2(class="btn btn-success") }}
+                </div>
+            </form>
+            {% endif %}
         </div>
     </div>
- </div>
+</div>
 {% endblock content %}

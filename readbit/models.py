@@ -400,9 +400,10 @@ class iInstructor():
         return student_list
 
     @staticmethod
-    def addMarks(inst_id, comp_id, module, class_name, marks):
+    def addMarks(inst_id, comp_id, module, class_name, marks, id_flag):
         for mod_class in module.class_list:
             if mod_class.class_name == class_name:
+                fail = True
                 for student in mod_class.stud_list:
                     feedback = None
                     for fb in student.feedback_list:
@@ -415,11 +416,15 @@ class iInstructor():
                     db.session.add(feedback)
                     db.session.commit()
                     for mark in marks:
-                        if mark['student_name'] == student.username:
+                        if (not id_flag and mark.get('student_name') == student.username) or \
+                           (id_flag and mark.get('student_id') == student.id):
+                            fail = False
                             error = FeedbackManager.addMarks(feedback, mark['marks'])
                             if error:
                                 return error
                             break
+                if fail:
+                    return "Error: Student is not in this class"
                 db.session.commit()
                 break
         return None
