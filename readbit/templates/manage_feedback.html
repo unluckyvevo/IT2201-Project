@@ -10,72 +10,72 @@
         <h2 class="ml-5">Add Feedback to Component</h2>
         <div class="column" id="feedback_column1">
             <div class="row mt-4 ml-5">
-                    <label for="feedback_textarea" form="feedback_form">New Comment</label>
-                </div>
-                <div class="row ml-5 mt-3">
-                    <div class="form-group w-75">
+                <label for="feedback_textarea" form="feedback_form">New Comment</label>
+            </div>
+            <div class="row ml-5 mt-3">
+                <div class="form-group w-75">
                         <textarea class="form-control" id="feedback_textarea" name="feedback_textarea"
                                   rows="10" form="feedback_form" required></textarea>
-                    </div>
                 </div>
+            </div>
             <div class="row ml-5" id="feedback_submit_button_row">
                 <a href="{{url_for('manage_module', mod_id=mod_id)}}" class="btn btn-outline-danger">Back</a>
                 <button name = "submit_comment_btn" type="submit" class="btn btn-success py-0" form="feedback_form">Submit</button>
             </div>
-            </div>
-            <div class="column" id="feedback_column2">
-                <div class="row mt-3 mr-3" id="class_ddl_row">
+        </div>
+        <div class="column" id="feedback_column2">
+            <div class="row mt-3 mr-3" id="class_ddl_row">
                 <label id="filter_class_label" for="filter_class_ddl">Class: </label>
                 <form method="post" action="" id="select_class_form">
-                <select id="add_feedback_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
-                    {% if selected is not defined %}
+                    <select id="add_feedback_class_ddl" name = "class_select" class="form-control" onchange="this.form.submit()">
+                        {% if selected is not defined %}
                         <option disabled selected value> -- select an option -- </option>
-                    {% else %}
-                        <option disabled value> -- select an option -- </option>
-                    {% endif %}
-                    {% for class in class_list %}
-                        {% if selected is defined and class.class_name == selected %}
-                            <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
                         {% else %}
-                            <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                        <option disabled value> -- select an option -- </option>
                         {% endif %}
-                    {% endfor %}
-                </select>
+                        {% for class in class_list %}
+                        {% if selected is defined and class.class_name == selected %}
+                        <option selected value="{{ class.class_name }}">{{ class.class_name }}</option>
+                        {% else %}
+                        <option value="{{ class.class_name }}">{{ class.class_name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
                 </form>
             </div>
 
-                <div class="table-wrapper-scroll-y custom-scrollbar m-3">
-                  <table class="table table-bordered table-striped mt-3 mb-0">
+            <div class="table-wrapper-scroll-y custom-scrollbar m-3">
+                <table class="table table-bordered table-striped mt-3 mb-0">
                     <thead>
-                        <tr class="text-center">
-                          <th scope="col">
-                                <input type="checkbox" id="all_check" onClick="toggle(this)">
-                          </th>
-                          <th scope="col">Student ID</th>
-                          <th scope="col">Student Name</th>
-                        </tr>
+                    <tr class="text-center">
+                        <th scope="col">
+                            <input type="checkbox" id="all_check" onClick="toggle(this)">
+                        </th>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">Student Name</th>
+                    </tr>
                     </thead>
-                      <tbody>
-                        {% if student_list is defined %}
-                            {% for student in student_list %}
-                                <tr class="text-center">
-                                    <th scope="col">
-                                        <input type="checkbox" class="feedback_checkboxes" name="student_check"
-                                               form="feedback_form" value="{{ student['id'] }}">
-                                    </th>
-                                    <td>{{ student['id'] }}</td>
-                                    <td>{{ student['name'] }}</td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                      </tbody>
+                    <tbody>
+                    {% if student_list is defined %}
+                    {% for student in student_list %}
+                    <tr class="text-center">
+                        <th scope="col">
+                            <input type="checkbox" class="feedback_checkboxes" name="student_check"
+                                   form="feedback_form" value="{{ student['id'] }}">
+                        </th>
+                        <td>{{ student['id'] }}</td>
+                        <td>{{ student['name'] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                    </tbody>
 
-                  </table>
-                </div>
+                </table>
             </div>
         </div>
-
     </div>
+
+</div>
 <script>
     function toggle(source) {
         checkboxes = document.getElementsByClassName('feedback_checkboxes');

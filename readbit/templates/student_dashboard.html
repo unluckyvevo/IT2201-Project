@@ -4,18 +4,18 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='student_dashboard.css') }}">
 
 <div class="row m-0 mb-2" id="header_row">
-<h1>{{ current_user.username }}'s Dashboard</h1>
-<a href="{{ url_for('class_dashboard')}}" class="btn btn-info" id="view_class_dashboard_btn">View Class Dashboard</a>
+    <h1>{{ current_user.username }}'s Dashboard</h1>
+    <a href="{{ url_for('class_dashboard')}}" class="btn btn-info" id="view_class_dashboard_btn">View Class Dashboard</a>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-sm-2" id="student_dashboard_nav">
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <a class="nav-link active" id="module1" data-toggle="pill" href="#module1_content" role="tab" aria-controls="v-pills-home" aria-selected="true">Module #1</a>
-              <a class="nav-link" id="module2" data-toggle="pill" href="#module2_content" role="tab" aria-controls="v-pills-profile" aria-selected="false">Module #2</a>
-              <a class="nav-link" id="module3" data-toggle="pill" href="#module3_content" role="tab" aria-controls="v-pills-messages" aria-selected="false">Module #3</a>
-              <a class="nav-link" id="module4" data-toggle="pill" href="#module4_content" role="tab" aria-controls="v-pills-settings" aria-selected="false">Module #4</a>
-              <a class="nav-link" id="module5" data-toggle="pill" href="#module5_content" role="tab" aria-controls="v-pills-settings" aria-selected="false">Module #5</a>
+                <a class="nav-link active" id="module1" data-toggle="pill" href="#module1_content" role="tab" aria-controls="v-pills-home" aria-selected="true">Module #1</a>
+                <a class="nav-link" id="module2" data-toggle="pill" href="#module2_content" role="tab" aria-controls="v-pills-profile" aria-selected="false">Module #2</a>
+                <a class="nav-link" id="module3" data-toggle="pill" href="#module3_content" role="tab" aria-controls="v-pills-messages" aria-selected="false">Module #3</a>
+                <a class="nav-link" id="module4" data-toggle="pill" href="#module4_content" role="tab" aria-controls="v-pills-settings" aria-selected="false">Module #4</a>
+                <a class="nav-link" id="module5" data-toggle="pill" href="#module5_content" role="tab" aria-controls="v-pills-settings" aria-selected="false">Module #5</a>
             </div>
         </div>
         <div class="col-sm-10" id="student_dashboard_right_col">
@@ -28,35 +28,35 @@
                 <div class="table-wrapper-scroll-y my-custom-scrollbar" id="table_div">
 
                     <table class="table table-bordered table-striped mb-0">
-                    <thead>
-                          <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Comments</th>
-                          </tr>
-                    </thead>
-                    <tbody>
-                    {% for i in range(10) %}
-                         <tr>
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Comments</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in range(10) %}
+                        <tr>
                             <th scope="row">#{{ i+1 }}</th>
                             <td>Comments from the teacher on this module</td>
-                          </tr>
-                    {% endfor %}
+                        </tr>
+                        {% endfor %}
 
-                    </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
-{#                <div class="tab-content" id="v-pills-tabContent">#}
-{#                  <div class="tab-pane fade show active" id="module1_content" role="tabpanel" aria-labelledby="module1">Module 1 comments</div>#}
-{#                  <div class="tab-pane fade" id="module2_content" role="tabpanel" aria-labelledby="module2">Module 2 comments</div>#}
-{#                  <div class="tab-pane fade" id="module3_content" role="tabpanel" aria-labelledby="module3">Module 3 comments</div>#}
-{#                  <div class="tab-pane fade" id="module4_content" role="tabpanel" aria-labelledby="module4">Module 4 comments</div>#}
-{#                  <div class="tab-pane fade" id="module5_content" role="tabpanel" aria-labelledby="module5">Module 5 comments</div>#}
-{#                </div>#}
-            </div>
-
+            {#                <div class="tab-content" id="v-pills-tabContent">#}
+            {#                  <div class="tab-pane fade show active" id="module1_content" role="tabpanel" aria-labelledby="module1">Module 1 comments</div>#}
+            {#                  <div class="tab-pane fade" id="module2_content" role="tabpanel" aria-labelledby="module2">Module 2 comments</div>#}
+            {#                  <div class="tab-pane fade" id="module3_content" role="tabpanel" aria-labelledby="module3">Module 3 comments</div>#}
+            {#                  <div class="tab-pane fade" id="module4_content" role="tabpanel" aria-labelledby="module4">Module 4 comments</div>#}
+            {#                  <div class="tab-pane fade" id="module5_content" role="tabpanel" aria-labelledby="module5">Module 5 comments</div>#}
+            {#                </div>#}
         </div>
+
     </div>
+</div>
 
 </div>
 
