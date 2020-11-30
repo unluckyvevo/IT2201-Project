@@ -5,6 +5,7 @@ from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
 import typing, logging, pprint
 from flask import request
+import pandas as pd
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,6 +55,7 @@ def view_component_scores():
     component_name = "Component"
     return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
+
 @app.route('/manage_class', methods=['GET', 'POST'])
 def manage_class():
     if current_user.type == 'student':
@@ -68,10 +70,49 @@ def manage_class():
     if request.method == "POST":
         selected_class = request.form['class_select']
         student_list = iInstructor.viewClass(selected_class, module)
+
+        if 'csv-submit' in request.form:
+            data = pd.read_csv(request.files['filename'])
+            if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
+                success = True
+                for index, row in data.iterrows():
+                    stud_info = {'id': row['Student ID'], 'name': row['Student Name'],
+                                 'email': row['Student Email']}
+                    error = iInstructor.addStudent(modid, selected_class, stud_info)
+                    if error:
+                        flash(error, 'danger')
+                        success = False
+                        break
+                if success:
+                    return redirect(url_for('manage_class', mod_id=modid, success=True))
+            else:
+                flash('Error: Incorrect file format. Please refer to the template.', 'danger')
+
         return render_template('manage_class.html', title='Manage Class', selected=selected_class,
                                class_list=module.class_list, stud_list=student_list, mod_id=modid)
 
     return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
+
+@app.route('/add_student_manually', methods=['GET', 'POST'])
+def add_student_manually():
+    if current_user.type == 'student':
+        return redirect(url_for('student_dashboard'))
+
+    form = AddStudentForm()
+
+    modid = request.args.get('mod_id')
+    selected = request.args.get('class')
+
+    if form.validate_on_submit():
+        stud_info = {'id' : form.student_id.data, 'name' : form.student_name.data, 'email' : form.student_email.data}
+        error = iInstructor.addStudent(modid, selected, stud_info)
+        if error:
+            flash(error, 'danger')
+        else:
+            return redirect(url_for('manage_class', mod_id=modid, success=True))
+
+    return render_template('add_student_manually.html', title='Add Student Manually', form=form)
+
 
 @app.route('/manage_feedback', methods=['GET', 'POST'])
 def manage_feedback():
@@ -164,25 +205,6 @@ def manage_module():
 
     return render_template('manage_module.html', title='Manage Module', module=module, components= module.comp_list)
 
-@app.route('/add_student_manually', methods=['GET', 'POST'])
-def add_student_manually():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-
-    form = AddStudentForm()
-
-    modid = request.args.get('mod_id')
-    selected = request.args.get('class')
-
-    if form.validate_on_submit():
-        stud_info = {'id' : form.student_id.data, 'name' : form.student_name.data, 'email' : form.student_email.data}
-        error = iInstructor.addStudent(modid, selected, stud_info)
-        if error:
-            flash(error, 'danger')
-        else:
-            return redirect(url_for('manage_class', mod_id=modid, success=True))
-
-    return render_template('add_student_manually.html', title='Add Student Manually', form=form)
 
 @app.route('/student_dashboard')
 def student_dashboard():

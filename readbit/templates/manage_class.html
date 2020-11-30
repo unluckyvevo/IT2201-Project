@@ -45,8 +45,8 @@
                   <div class="row ml-3 mt-3">
                       Upload Excel Sheet (.csv)
                   </div>
-                        <form action="">
-
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            <input type="hidden" name="class_select" value={{selected}}>
                             <div class="row m-2" id="modal_submit_row">
                                 <input class="border overflow-auto m-2" type="file" accept=".xls,.xlsx,.csv" id="file_upload_box" name="filename">
 
@@ -55,10 +55,8 @@
 
                                 </div>
                                  <div class="col-sm-4 d-flex justify-content-end">
-                                     <button type="submit" class="btn btn-info mt-3" data-toggle="modal" >Submit</button>
+                                     <button type="submit" class="btn btn-info mt-3" data-toggle="modal" name="csv-submit">Submit</button>
                                 </div>
-
-
                             </div>
                         </form>
                     </div>

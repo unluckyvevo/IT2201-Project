@@ -348,6 +348,7 @@ class iInstructor():
             return "Error: Student ID is incorrect"
 
         db.session.commit()
+        return None
 
     @staticmethod
     def addStudentCSV():
@@ -376,6 +377,7 @@ class iInstructor():
                     return error
 
         db.session.commit()
+        return None
 
     @staticmethod
     def viewClass(class_name, module, **kwargs):
@@ -420,6 +422,7 @@ class iInstructor():
                             break
                 db.session.commit()
                 break
+        return None
 
     @staticmethod
     def addMarksCSV():
@@ -448,6 +451,7 @@ class iInstructor():
 
                 db.session.commit()
                 break
+        return None
 
 
 class iStudent():
