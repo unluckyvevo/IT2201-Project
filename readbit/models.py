@@ -416,6 +416,7 @@ class iInstructor():
                            (id_flag and mark.get('student_id') == student.id):
                             fail = False
                             error = FeedbackManager.addMarks(feedback, mark['marks'])
+                            StudentNotifier.notify(student)
                             if error:
                                 return error
                             break

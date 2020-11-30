@@ -60,3 +60,11 @@
     height: auto;
     width:8%
 }
+
+#view_student_frog
+{
+    position:absolute;
+    padding-top: 150px;
+    height: auto;
+    width:6%
+}

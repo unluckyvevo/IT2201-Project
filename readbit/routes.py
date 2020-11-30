@@ -230,7 +230,7 @@ def manage_module():
 
 @app.route('/student_dashboard')
 def student_dashboard():
-    student_frog_state = url_for('static', filename='frog_state_1.png')
+    student_frog_state = url_for('static', filename='frogling.png')
 
     context = {
         'student_frog_state': student_frog_state
@@ -253,12 +253,19 @@ def view_student():
     modid = request.args.get('mod_id')
     module = Module.query.filter_by(id=modid).first()
 
+    for frog in student.frog_list:
+        if frog.mod_name == module.mod_name:
+            frog_img = url_for('static', filename=f'{frog.frog_state}.png')
+            break
+
     comments = []
     for feedback in student.feedback_list:
         if feedback.mod_name == module.mod_name and feedback.comment is not None:
             comments.append({'comment' : feedback.comment, 'component' : feedback.component.name})
 
-    return render_template('view_student.html', title='View Student Dashboard', student=student, comments=comments)
+
+    return render_template('view_student.html', title='View Student Dashboard', student=student,
+                           comments=comments, frog=frog_img)
 
 @app.route('/add_component', methods=['GET', 'POST'])
 def add_component():
