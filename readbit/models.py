@@ -47,8 +47,9 @@ class UserManager():
     def addMod(user, module):
         if module not in user.mod_list:
             user.mod_list.append(module)
+            return None
         else:
-            raise ValueError("Append failed: Module already exist")
+            return "Error: Module already exist"
 
     @staticmethod
     def changePassword(user, password):
@@ -114,7 +115,8 @@ class UserFactory():
         elif type == 'instructor':
             return Instructor(type=type, username=username, email=email, password=password)
         else:
-            raise ValueError(f'UserFactory.createUser(type=\'{type}\'): type must be of \'student\' or \'instructor\'')
+            return f'UserFactory.createUser(type=\'{type}\'): type must be of \'student\' or \'instructor\''
+
 
 class StudentNotifier():
     @staticmethod
@@ -149,7 +151,8 @@ class ModuleManager():
         if module_class not in module.class_list:
             module.class_list.append(module_class)
         else:
-            raise ValueError("Append failed: Class already exist")
+            return "Error: Class already exist"
+        return None
 
     @staticmethod
     def addComponent(module, main_component):
@@ -294,7 +297,7 @@ class ComponentFactory():
             return SubComp(name=name, weightage=weightage, type=type)
             #return SubComp(name=name, weightage=weightage, type=type, main_comp_id=main_comp_id)
         else:
-            raise ValueError(f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\'')
+            return f'ComponentFactory.createComponent(type=\'{type}\'): type must be of \'main\' or \'sub\''
 
 
 # Backref(s): component
