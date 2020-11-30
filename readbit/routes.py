@@ -42,7 +42,7 @@ def login():
 def module_list():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    
+
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
 
 
@@ -129,9 +129,6 @@ def manage_feedback():
         student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
 
         if 'submit_comment_btn' in request.form:
-            print(request.form.getlist('student_check'))
-            print(request.form)
-
             error = iInstructor.addFeedback(current_user.id, comp_id, module, request.form['class_select'],
                                          request.form['feedback_textarea'], request.form.getlist('student_check'))
 
