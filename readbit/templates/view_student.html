@@ -2,7 +2,7 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='student_dashboard.css') }}">
 
-<h3>{{ student }}'s Dashboard | {{ student_id }}</h3>
+<h3>{{ student.username }}'s Dashboard</h3>
     <div class="container">
 
     <div class="row" id="view_student_tank_row">
@@ -16,14 +16,16 @@
                     <thead>
                           <tr>
                               <th scope="col">#</th>
-                              <th scope="col">Comments</th>
+                              <th scope="col">Comment</th>
+                              <th scope="col">Component</th>
                           </tr>
                     </thead>
                     <tbody>
-                    {% for i in range(10) %}
+                    {% for comment in comments %}
                          <tr>
-                            <th scope="row">#{{ i+1 }}</th>
-                            <td>Comments from the teacher on this module</td>
+                            <th scope="row">#{{ loop.index0+1 }}</th>
+                            <td>{{ comment['comment'] }}</td>
+                             <td>{{ comment['component'] }}</td>
                           </tr>
                     {% endfor %}
 

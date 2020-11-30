@@ -19,7 +19,7 @@
                     </div>
                 </div>
             <div class="row ml-5" id="feedback_submit_button_row">
-                <button class="btn btn-outline-danger" onclick="javascript:history.back()">Back</button>
+                <a href="{{url_for('manage_module', mod_id=mod_id)}}" class="btn btn-outline-danger">Back</a>
                 <button name = "submit_comment_btn" type="submit" class="btn btn-success py-0" form="feedback_form">Submit</button>
             </div>
             </div>
