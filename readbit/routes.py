@@ -69,7 +69,8 @@ def manage_class():
 
     if request.method == "POST":
         selected_class = request.form['class_select']
-        student_list = iInstructor.viewClass(selected_class, module)
+        student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
+        print(student_list)
 
         if 'csv-submit' in request.form:
             data = pd.read_csv(request.files['filename'])
@@ -89,9 +90,9 @@ def manage_class():
                 flash('Error: Incorrect file format. Please refer to the template.', 'danger')
 
         return render_template('manage_class.html', title='Manage Class', selected=selected_class,
-                               class_list=module.class_list, stud_list=student_list, mod_id=modid)
+                               stud_list=student_list,module=module)
 
-    return render_template('manage_class.html', title='Manage Class', class_list=module.class_list)
+    return render_template('manage_class.html', title='Manage Class',module=module)
 
 @app.route('/add_student_manually', methods=['GET', 'POST'])
 def add_student_manually():
@@ -111,7 +112,7 @@ def add_student_manually():
         else:
             return redirect(url_for('manage_class', mod_id=modid, success=True))
 
-    return render_template('add_student_manually.html', title='Add Student Manually', form=form)
+    return render_template('add_student_manually.html', title='Add Student Manually', form=form, mod_id=modid)
 
 
 @app.route('/manage_feedback', methods=['GET', 'POST'])
@@ -143,7 +144,7 @@ def manage_feedback():
         return render_template('manage_feedback.html', title='Manage Feedback', selected=selected_class,
                                class_list=module.class_list, mod_id=modid, student_list=student_list)
 
-    return render_template('manage_feedback.html', title='Manage Feedback', class_list=module.class_list)
+    return render_template('manage_feedback.html', title='Manage Feedback', mod_id=modid, class_list=module.class_list)
 
 @app.route('/add_marks', methods=['GET', 'POST'])
 def add_marks():
@@ -198,7 +199,7 @@ def add_marks():
                                class_list=module.class_list, mod_id=modid, form=form)
 
 
-    return render_template('add_marks.html', title='Add Marks', class_list=module.class_list, form=form)
+    return render_template('add_marks.html', title='Add Marks', mod_id=modid, class_list=module.class_list, form=form)
 
 @app.route('/logout')
 def logout():
@@ -238,8 +239,6 @@ def student_dashboard():
 
 @app.route('/class_dashboard')
 def class_dashboard():
-    # if current_user.type == 'student':
-    #     return redirect(url_for('student_dashboard'))
     classlist: typing.List[int] = [1,2,3,4,5,6]
     return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
 
@@ -247,9 +246,19 @@ def class_dashboard():
 def view_student():
     if current_user.type == 'student':
         return redirect(url_for('student_dashboard'))
-    student = 'Studentname'
-    student_id = 190000
-    return render_template('view_student.html', title='View Student Dashboard', student=student, student_id=student_id)
+
+    stud_id = request.args.get('stud_id')
+    student = Student.query.filter_by(id=stud_id).first()
+
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    comments = []
+    for feedback in student.feedback_list:
+        if feedback.mod_name == module.mod_name and feedback.comment is not None:
+            comments.append({'comment' : feedback.comment, 'component' : feedback.component.name})
+
+    return render_template('view_student.html', title='View Student Dashboard', student=student, comments=comments)
 
 @app.route('/add_component', methods=['GET', 'POST'])
 def add_component():

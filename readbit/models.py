@@ -329,7 +329,6 @@ class FeedbackManager():
             return "Error: Comment must not be empty"
 
 class iInstructor():
-    #  iInstructor.addStudent(modid, selected, stud_info)
     @staticmethod
     def addStudent(module_id, class_name, student_info):
         student = Student.query.filter_by(id=student_info['id']).first()
@@ -350,11 +349,6 @@ class iInstructor():
         db.session.commit()
         return None
 
-    @staticmethod
-    def addStudentCSV():
-        pass
-
-    # iInstructor.addComponent(module, form.main_comps.data)
     @staticmethod
     def addComponent(module, components):
         original = module
@@ -386,14 +380,16 @@ class iInstructor():
             if mod_class.class_name == class_name:
                 for student in mod_class.stud_list:
                     stud_info = {}
+
+                    comp_id = kwargs.get('comp_id')
+                    if comp_id:
+                        stud_info = StudentManager.getMarks(student, comp_id)
+                    else:
+                        stud_info = StudentManager.getGrade(student, module)
+
                     if kwargs.get('stud_id'):
                         stud_info['id'] = student.id
-                    else:
-                        comp_id = kwargs.get('comp_id')
-                        if comp_id:
-                            stud_info = StudentManager.getMarks(student, comp_id)
-                        else:
-                            stud_info = StudentManager.getGrade(student, module)
+
                     stud_info['name'] = student.username
                     student_list.append(stud_info)
                 break
@@ -428,10 +424,6 @@ class iInstructor():
                 db.session.commit()
                 break
         return None
-
-    @staticmethod
-    def addMarksCSV():
-        pass
 
     @staticmethod
     def addFeedback(inst_id, comp_id, module, class_name, comment, stud_list):
