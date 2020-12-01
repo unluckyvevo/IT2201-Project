@@ -17,7 +17,7 @@
 {
     background-color: steelblue;
     border-style: dashed;
-    height: 80vh;
+
 }
 .nav-link
 {
@@ -27,9 +27,15 @@
 {
     border-style:dashed;
     border-left: none;
+    height: 80vh;
 }
 #student_tank_row
 {
+    border-bottom: dashed;
+
+}
+
+#student_dashboard_nav_header {
     border-bottom: dashed;
 }
 .my-custom-scrollbar
@@ -45,7 +51,13 @@
 #student_dashboard_table_row
 {
     justify-content: center;
+    overflow: hidden;
 }
+
+#mod_list_pills {
+    border-top: dashed;
+}
+
 #table_div{
     width: 65vw;
 }
@@ -56,7 +68,7 @@
 #student_dashboard_frog
 {
     position:absolute;
-    padding-top: 200px;
+    padding-top: 170px;
     height: auto;
     width:8%
 }
@@ -68,3 +80,5 @@
     height: auto;
     width:6%
 }
+
+

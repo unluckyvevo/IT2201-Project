@@ -227,12 +227,17 @@ def manage_module():
 
 @app.route('/student_dashboard')
 def student_dashboard():
-    student_frog_state = url_for('static', filename='frogling.png')
 
-    context = {
-        'student_frog_state': student_frog_state
-    }
-    return render_template('student_dashboard.html', title='Student Dashboard', context=context)
+    modid = request.args.get('mod_id')
+    if modid:
+        module = Module.query.filter_by(id=modid).first()
+    else:
+        module = current_user.mod_list[0]
+
+    frog_img, comments = iStudent.viewDashboard(current_user, module)
+
+    return render_template('student_dashboard.html', title='Student Dashboard', frog_img=frog_img,
+                           comments=comments, mod_id=module.id)
 
 @app.route('/class_dashboard')
 def class_dashboard():
@@ -250,16 +255,7 @@ def view_student():
     modid = request.args.get('mod_id')
     module = Module.query.filter_by(id=modid).first()
 
-    for frog in student.frog_list:
-        if frog.mod_name == module.mod_name:
-            frog_img = url_for('static', filename=f'{frog.frog_state}.png')
-            break
-
-    comments = []
-    for feedback in student.feedback_list:
-        if feedback.mod_name == module.mod_name and feedback.comment is not None:
-            comments.append({'comment' : feedback.comment, 'component' : feedback.component.name})
-
+    frog_img, comments = iStudent.viewDashboard(student, module)
 
     return render_template('view_student.html', title='View Student Dashboard', student=student,
                            comments=comments, frog=frog_img)
