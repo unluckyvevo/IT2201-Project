@@ -121,8 +121,12 @@ def manage_feedback():
         student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
 
         if 'submit_comment_btn' in request.form:
-            error = iInstructor.addFeedback(current_user.id, comp_id, module, request.form['class_select'],
-                                         request.form['feedback_textarea'], request.form.getlist('student_check'))
+            student_check = request.form.getlist('student_check')
+            if student_check:
+                error = iInstructor.addFeedback(current_user.id, comp_id, module, request.form['class_select'],
+                                             request.form['feedback_textarea'], student_check)
+            else:
+                error = "Error: No students are selected"
 
             if error:
                 flash(error, 'danger')
