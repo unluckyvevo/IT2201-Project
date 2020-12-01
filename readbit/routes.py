@@ -61,21 +61,25 @@ def manage_class():
         student_list = sorted(student_list, key=lambda k: k['name'])
 
         if 'csv-submit' in request.form and request.files.get('filename'):
-            data = pd.read_csv(request.files['filename'])
-            if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
-                success = True
-                for index, row in data.iterrows():
-                    stud_info = {'id': row['Student ID'], 'name': row['Student Name'],
-                                 'email': row['Student Email']}
-                    error = iInstructor.addStudent(modid, selected_class, stud_info)
-                    if error:
-                        flash(error, 'danger')
-                        success = False
-                        break
-                if success:
-                    return redirect(url_for('manage_class', mod_id=modid, success=True))
+            ext = request.files['filename'].filename.split('.')[-1]
+            if ext not in ['xls', 'xlsx', 'csv']:
+                flash('File does not have an approved extension: xls, xlsx, csv', 'danger')
             else:
-                flash('Error: Incorrect file format. Please refer to the template.', 'danger')
+                data = pd.read_csv(request.files['filename'])
+                if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
+                    success = True
+                    for index, row in data.iterrows():
+                        stud_info = {'id': row['Student ID'], 'name': row['Student Name'],
+                                     'email': row['Student Email']}
+                        error = iInstructor.addStudent(modid, selected_class, stud_info)
+                        if error:
+                            flash(error, 'danger')
+                            success = False
+                            break
+                    if success:
+                        return redirect(url_for('manage_class', mod_id=modid, success=True))
+                else:
+                    flash('Error: Incorrect file format. Please refer to the template.', 'danger')
 
         return render_template('manage_class.html', title='Manage Class', selected=selected_class,
                                stud_list=student_list,module=module)
@@ -142,6 +146,7 @@ def add_marks():
 
     form = AddMarksFormSet()
     csv_flag = False
+
     if form.validate_on_submit():
         if form.csv_file.data:
             data = pd.read_csv(form.csv_file.data)
@@ -165,6 +170,8 @@ def add_marks():
                 flash(error, 'danger')
             else:
                 flash('Marks added successfully.', 'success')
+    elif form.csv_file.data:
+        flash(form.errors['csv_file'][0], 'danger')
 
 
     if request.method == "POST" and 'class_select' in request.form:
