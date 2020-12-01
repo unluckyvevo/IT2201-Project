@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, session
 from readbit import *
 from readbit.forms import *
 from readbit.models import *
@@ -9,6 +9,9 @@ import pandas as pd
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if not session.get('login_attempts'):
+        session['login_attempts'] = 0
+
     if current_user.is_authenticated:
         if current_user.type == 'student':
             return redirect(url_for('student_dashboard'))
@@ -17,21 +20,25 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        if session['login_attempts'] >= 5:
+            flash(f"You've reached the maximum login attempts. Exit your browser and try again", 'danger')
+        else:
+            user = User.query.filter_by(email=form.email.data).first()
 
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                login_user(user, remember=form.remember.data)
+                next_page = request.args.get('next')
 
-            if next_page:
-                return redirect(url_for(next_page[1:]))
+                if next_page:
+                    return redirect(url_for(next_page[1:]))
+
+                else:
+                    return redirect(url_for('student_dashboard')) if current_user.type == 'student' else redirect(
+                        url_for('module_list'))
 
             else:
-                return redirect(url_for('student_dashboard')) if current_user.type == 'student' else redirect(
-                    url_for('module_list'))
-
-        else:
-            flash(f'Login Unsuccessful. Please check email and password', 'danger')
+                flash(f'Login Unsuccessful. Please check email and password', 'danger')
+                session['login_attempts'] += 1
 
     return render_template('login.html', title='Login', form=form)
 
