@@ -33,14 +33,11 @@
                 {% if current_user.is_authenticated %}
                     {% if current_user.type != 'student' %}
                     <a class="nav-item nav-link" href="{{ url_for('module_list') }}">Module List</a>
-<!--                    <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>-->
                     <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                     {% else %}
-<!--                    <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>-->
                     <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
                     {% endif %}
                 {% else %}
-<!--                    <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>-->
                 {% endif %}
             </div>
           </div>
