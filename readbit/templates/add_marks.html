@@ -37,10 +37,10 @@
             <form method="POST" action="" id="add_marks_form" name="add_marks_form" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="row mt-3">
-                    <div class="col-sm-12">
-                        {{ form.csv_file(class="border overflow-auto", accept=".xls,.xlsx,.csv") }}
+                    <div class="col-sm-8">
+                        {{ form.csv_file(class="border overflow-auto w-100", accept=".xls,.xlsx,.csv") }}
                     </div>
-                    <div class="col-sm-6 text-right mt-1">
+                    <div class="col-sm-4 text-right mb-1">
                         <a type="button"  class="btn btn-info add_marks_download_btn" href="../static/Readbit_Add_Marks.csv" download="Readbit_Add_Student.csv">Download Template</a>
 
                     </div>
