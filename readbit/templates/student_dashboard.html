@@ -5,7 +5,7 @@
 
 <div class="row m-0 mb-2" id="header_row">
     <h1>{{ current_user.username }}'s Dashboard</h1>
-    <a href="{{ url_for('class_dashboard')}}" class="btn btn-info" id="view_class_dashboard_btn">View Class Dashboard</a>
+    <a href="{{ url_for('class_dashboard', mod_id=mod_id)}}" class="btn btn-info" id="view_class_dashboard_btn">View Class Dashboard</a>
 </div>
 <div class="container overflow-hidden">
     <div class="row">

@@ -4,23 +4,23 @@
 <h1>Class Dashboard</h1>
 <div class="container">
 
-    {% for class_row in classlist | batch(5, 'xxxx') %}
+    {% set count = namespace(value=1) %}
+    {% set col = 4 %}
+    {% for row in frog_list | batch(col) %}
     <div class="row" id="class_list_row">
-        {% for student in class_row %}
-        {% if student in classlist %}
+        {% for frog in row %}
          <div class="column" id="class_dashboard_col">
             <div class="row justify-content-center" id="class_tank_row">
-                <img class="responsive" src={{url_for('static', filename='student_tank.png')}} alt="{{ student }}"  width=200/>
-                <img id="student_frog" src={{url_for('static', filename='frogexample.png')}} alt="{{ student }}"  width=30/>
+                <img class="responsive" src={{url_for('static', filename='student_tank.png')}} alt="{{ frog }}"  width=200/>
+                <img id="student_frog" src={{frog}} alt="{{ student }}"  width=40/>
             </div>
             <div class="row justify-content-center">
-                #{{ student }}
+                #{{ loop.index0 + count.value }}
             </div>
 
         </div>
-        {% endif %}
-
         {% endfor %}
+        {% set count.value = count.value + col %}
     </div>
     {% endfor %}
 

@@ -4,12 +4,10 @@ from readbit.forms import *
 from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
 import typing, logging, pprint
-from flask import request
 import pandas as pd
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
-
 def login():
     if current_user.is_authenticated:
         if current_user.type == 'student':
@@ -44,16 +42,6 @@ def module_list():
         return redirect(url_for('student_dashboard'))
 
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
-
-
-
-@app.route('/view_component_scores')
-def view_component_scores():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-    module_name = "Module"
-    component_name = "Component"
-    return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
 
 @app.route('/manage_class', methods=['GET', 'POST'])
@@ -241,8 +229,12 @@ def student_dashboard():
 
 @app.route('/class_dashboard')
 def class_dashboard():
-    classlist: typing.List[int] = [1,2,3,4,5,6]
-    return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    frog_list = iStudent.viewClassDashboard(current_user, module)
+
+    return render_template('class_dashboard.html', title='Class Dashboard', frog_list=frog_list)
 
 @app.route('/view_student')
 def view_student():

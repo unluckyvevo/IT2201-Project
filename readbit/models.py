@@ -470,3 +470,13 @@ class iStudent():
                 comments.append({'comment': feedback.comment, 'component': feedback.component.name})
 
         return frog_state, comments
+
+    @staticmethod
+    def viewClassDashboard(student, module):
+        frogs = []
+        for mod_class in module.class_list:
+            if mod_class in student.listeners:
+                for frog in mod_class.frog_list:
+                    frogs.append(url_for('static', filename=f'{frog.frog_state}.png'))
+                break
+        return frogs
