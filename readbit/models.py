@@ -398,7 +398,11 @@ class iInstructor():
     def addMarks(inst_id, comp_id, module, class_name, marks, id_flag):
         for mod_class in module.class_list:
             if mod_class.class_name == class_name:
-                fail = True
+                if id_flag:
+                    for mark in marks:
+                        student = Student.query.filter_by(id=int(mark.get('student_id'))).first()
+                        if student not in mod_class.stud_list:
+                            return "Error: Student is not in this class"
                 for student in mod_class.stud_list:
                     feedback = None
                     for fb in student.feedback_list:
@@ -413,14 +417,11 @@ class iInstructor():
                     for mark in marks:
                         if (not id_flag and mark.get('student_name') == student.username) or \
                            (id_flag and mark.get('student_id') == student.id):
-                            fail = False
                             error = FeedbackManager.addMarks(feedback, mark['marks'])
                             StudentNotifier.notify(student)
                             if error:
                                 return error
                             break
-                if fail:
-                    return "Error: Student is not in this class"
                 db.session.commit()
                 break
         return None
