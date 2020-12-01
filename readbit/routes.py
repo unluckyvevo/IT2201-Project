@@ -51,38 +51,43 @@ def manage_class():
 
     if request.args.get('success'):
         flash('Student added successfully.', 'success')
+    elif request.args.get('noclass'):
+        flash('Error: No class is selected', 'danger')
 
     modid = request.args.get('mod_id')
     module = Module.query.filter_by(id=modid).first()
 
     if request.method == "POST":
         selected_class = request.form['class_select']
-        student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
-        student_list = sorted(student_list, key=lambda k: k['name'])
-
-        if 'csv-submit' in request.form and request.files.get('filename'):
-            ext = request.files['filename'].filename.split('.')[-1]
-            if ext not in ['xls', 'xlsx', 'csv']:
-                flash('File does not have an approved extension: xls, xlsx, csv', 'danger')
-            else:
-                data = pd.read_csv(request.files['filename'])
-                if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
-                    success = True
-                    for index, row in data.iterrows():
-                        stud_info = {'id': row['Student ID'], 'name': row['Student Name'],
-                                     'email': row['Student Email']}
-                        error = iInstructor.addStudent(modid, selected_class, stud_info)
-                        if error:
-                            flash(error, 'danger')
-                            success = False
-                            break
-                    if success:
-                        return redirect(url_for('manage_class', mod_id=modid, success=True))
+        if not selected_class:
+            flash('Error: No class is selected', 'danger')
+        else:
+            student_list = iInstructor.viewClass(selected_class, module, stud_id=True)
+            student_list = sorted(student_list, key=lambda k: k['name'])
+    
+            if 'csv-submit' in request.form and request.files.get('filename'):
+                ext = request.files['filename'].filename.split('.')[-1]
+                if ext not in ['xls', 'xlsx', 'csv']:
+                    flash('File does not have an approved extension: xls, xlsx, csv', 'danger')
                 else:
-                    flash('Error: Incorrect file format. Please refer to the template.', 'danger')
+                    data = pd.read_csv(request.files['filename'])
+                    if {'Student ID', 'Student Name', 'Student Email'}.issubset(data.columns):
+                        success = True
+                        for index, row in data.iterrows():
+                            stud_info = {'id': row['Student ID'], 'name': row['Student Name'],
+                                         'email': row['Student Email']}
+                            error = iInstructor.addStudent(modid, selected_class, stud_info)
+                            if error:
+                                flash(error, 'danger')
+                                success = False
+                                break
+                        if success:
+                            return redirect(url_for('manage_class', mod_id=modid, success=True))
+                    else:
+                        flash('Error: Incorrect file format. Please refer to the template.', 'danger')
 
-        return render_template('manage_class.html', title='Manage Class', selected=selected_class,
-                               stud_list=student_list,module=module)
+            return render_template('manage_class.html', title='Manage Class', selected=selected_class,
+                                   stud_list=student_list,module=module)
 
     return render_template('manage_class.html', title='Manage Class',module=module)
 
@@ -95,6 +100,9 @@ def add_student_manually():
 
     modid = request.args.get('mod_id')
     selected = request.args.get('class')
+
+    if not selected:
+        return redirect(url_for('manage_class', mod_id=modid, noclass=True))
 
     if form.validate_on_submit():
         stud_info = {'id' : form.student_id.data, 'name' : form.student_name.data, 'email' : form.student_email.data}
