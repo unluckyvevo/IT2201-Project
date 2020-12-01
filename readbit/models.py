@@ -1,6 +1,7 @@
 from readbit import db, login_manager, bcrypt
 from flask_login import UserMixin
 from datetime import datetime
+from flask import url_for
 import logging
 
 @login_manager.user_loader
@@ -456,4 +457,26 @@ class iInstructor():
 
 
 class iStudent():
-    pass
+    @staticmethod
+    def viewDashboard(student, module):
+        for frog in student.frog_list:
+            if frog.mod_name == module.mod_name:
+                frog_state = url_for('static', filename=f'{frog.frog_state}.png')
+                break
+
+        comments = []
+        for feedback in student.feedback_list:
+            if feedback.mod_name == module.mod_name and feedback.comment is not None:
+                comments.append({'comment': feedback.comment, 'component': feedback.component.name})
+
+        return frog_state, comments
+
+    @staticmethod
+    def viewClassDashboard(student, module):
+        frogs = []
+        for mod_class in module.class_list:
+            if mod_class in student.listeners:
+                for frog in mod_class.frog_list:
+                    frogs.append(url_for('static', filename=f'{frog.frog_state}.png'))
+                break
+        return frogs

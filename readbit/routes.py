@@ -4,12 +4,10 @@ from readbit.forms import *
 from readbit.models import *
 from flask_login import login_user, current_user, logout_user, login_required
 import typing, logging, pprint
-from flask import request
 import pandas as pd
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
-
 def login():
     if current_user.is_authenticated:
         if current_user.type == 'student':
@@ -44,16 +42,6 @@ def module_list():
         return redirect(url_for('student_dashboard'))
 
     return render_template('module_list.html', title='Module List', modulelist=current_user.mod_list)
-
-
-
-@app.route('/view_component_scores')
-def view_component_scores():
-    if current_user.type == 'student':
-        return redirect(url_for('student_dashboard'))
-    module_name = "Module"
-    component_name = "Component"
-    return render_template('view_component_scores.html', title='View Component Scores', module_name=module_name, component_name=component_name)
 
 
 @app.route('/manage_class', methods=['GET', 'POST'])
@@ -227,17 +215,26 @@ def manage_module():
 
 @app.route('/student_dashboard')
 def student_dashboard():
-    student_frog_state = url_for('static', filename='frogling.png')
 
-    context = {
-        'student_frog_state': student_frog_state
-    }
-    return render_template('student_dashboard.html', title='Student Dashboard', context=context)
+    modid = request.args.get('mod_id')
+    if modid:
+        module = Module.query.filter_by(id=modid).first()
+    else:
+        module = current_user.mod_list[0]
+
+    frog_img, comments = iStudent.viewDashboard(current_user, module)
+
+    return render_template('student_dashboard.html', title='Student Dashboard', frog_img=frog_img,
+                           comments=comments, mod_id=module.id)
 
 @app.route('/class_dashboard')
 def class_dashboard():
-    classlist: typing.List[int] = [1,2,3,4,5,6]
-    return render_template('class_dashboard.html', title='Class Dashboard', classlist=classlist)
+    modid = request.args.get('mod_id')
+    module = Module.query.filter_by(id=modid).first()
+
+    frog_list = iStudent.viewClassDashboard(current_user, module)
+
+    return render_template('class_dashboard.html', title='Class Dashboard', frog_list=frog_list)
 
 @app.route('/view_student')
 def view_student():
@@ -250,16 +247,7 @@ def view_student():
     modid = request.args.get('mod_id')
     module = Module.query.filter_by(id=modid).first()
 
-    for frog in student.frog_list:
-        if frog.mod_name == module.mod_name:
-            frog_img = url_for('static', filename=f'{frog.frog_state}.png')
-            break
-
-    comments = []
-    for feedback in student.feedback_list:
-        if feedback.mod_name == module.mod_name and feedback.comment is not None:
-            comments.append({'comment' : feedback.comment, 'component' : feedback.component.name})
-
+    frog_img, comments = iStudent.viewDashboard(student, module)
 
     return render_template('view_student.html', title='View Student Dashboard', student=student,
                            comments=comments, frog=frog_img)

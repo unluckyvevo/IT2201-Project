@@ -12,13 +12,13 @@ class LoginForm(FlaskForm):
 class SubComponentForm(FlaskForm):
     comp_name = StringField('Sub Component Name', validators=[DataRequired(), Length(max=100)],
                        render_kw={"placeholder": "Sub Comp Name"})
-    weightage = IntegerField('Weightage', validators=[DataRequired(), NumberRange(min=1, max=100)],
+    weightage = IntegerField('Weightage', validators=[validators.InputRequired(), NumberRange(min=1, max=100)],
                              render_kw={"placeholder": "Sub Comp Weight (%)"})
 
 class MainComponentForm(FlaskForm):
     comp_name = StringField('Main Component Name', validators=[DataRequired(), Length(max=100)],
                        render_kw={"placeholder": "Main Comp Name"})
-    weightage = IntegerField('Weightage', validators=[DataRequired(), NumberRange(min=1, max=100)],
+    weightage = IntegerField('Weightage', validators=[validators.InputRequired(), NumberRange(min=1, max=100)],
                              render_kw={"placeholder": "Main Comp Weight (%)"})
     sub_comps = FieldList(FormField(SubComponentForm), label='Sub Component')
     add_sub = SubmitField(label='Add Sub Component')
