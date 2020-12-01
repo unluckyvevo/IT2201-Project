@@ -61,7 +61,7 @@
         <td class="text-center"><a href="{{ url_for('manage_feedback', mod_id=module.id, comp_id=comp.id) }}" class="btn btn-info">Feedback</a></td>
         {% for sub in comp.sub_comp_list %}
     <tr>
-        <td class="manage_module_subcomponent"><img class="responsive" src="{{url_for('static', filename='frog_state_1.png')}}" alt="-->" width=16/>  {{ sub.name }}</td>
+        <td class="manage_module_subcomponent"><img class="responsive" src="{{url_for('static', filename='egg.png')}}" alt="-->" width=16/>  {{ sub.name }}</td>
         <td class="text-center">{{ sub.weightage }}%</td>
         <td class="text-center"><a href="{{ url_for('add_marks', mod_id=module.id, comp_id=sub.id) }}" id="add_student_btn" class="btn btn-info" >Add Marks</a></td>
         <td class="text-center"><a href="{{ url_for('manage_feedback', mod_id=module.id, comp_id=sub.id) }}" class="btn btn-info">Feedback</a></td>
