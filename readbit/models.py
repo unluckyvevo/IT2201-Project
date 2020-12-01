@@ -2,7 +2,6 @@ from readbit import db, login_manager, bcrypt
 from flask_login import UserMixin
 from datetime import datetime
 from flask import url_for
-import logging
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -94,11 +93,6 @@ class StudentManager():
             if feedback.comp_id == int(comp_id):
                 return {'marks' : feedback.marks}
         return {'marks': 0}
-
-
-
-
-
 
 class Instructor(User):
     class_list = db.relationship('ModuleClass', secondary=class_list, lazy='subquery',
@@ -315,7 +309,8 @@ class Feedback(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Feedback('{self.id}', '{self.stud_id}', '{self.comp_id}', '{self.mod_name}', '{self.comment}', '{self.marks}', '{self.date}')"
+        return f"Feedback('{self.id}', '{self.stud_id}', '{self.comp_id}', '{self.mod_name}', " \
+               f"'{self.comment}', '{self.marks}', '{self.date}')"
 
 class FeedbackManager():
     @staticmethod

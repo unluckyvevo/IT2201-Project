@@ -191,14 +191,7 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/account')
-@login_required
-def account():
-    return render_template('account.html', title='Account')
 
-"""
-Added by Dylan Woo
-"""
 @app.route('/manage_module')
 def manage_module():
     if current_user.type == 'student':
