@@ -59,8 +59,10 @@
              </div>
         </div>
         <div class="row mr-1" id="add_student_btn_row">
+            <a href="{{url_for('manage_class', mod_id=mod_id)}}" class="btn btn-outline-danger ml-2 mb-2">Back</a>
             <a href="{{ url_for('manage_class', mod_id=mod_id) }}" class=""></a>
             {{ form.submit(class="btn btn-primary mb-2") }}
+
         </div>
     </div>
 
