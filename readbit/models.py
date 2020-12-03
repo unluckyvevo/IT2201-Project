@@ -196,6 +196,7 @@ class ClassManager():
             module_class.frog_list.append(frog)
             UserManager.addMod(student, module_class.module)
             module_class.stud_list.append(student)
+            return None
 
 
 # Backref(s): owner
@@ -339,13 +340,13 @@ class iInstructor():
                         error = ClassManager.addStudent(mod_class, student)
                         if error:
                             return error
+                        db.session.commit()
                         break
             else:
                 return "Error: Student particulars are incorrect"
         else:
             return "Error: Student ID is incorrect"
 
-        db.session.commit()
         return None
 
     @staticmethod
@@ -378,8 +379,6 @@ class iInstructor():
         for mod_class in module.class_list:
             if mod_class.class_name == class_name:
                 for student in mod_class.stud_list:
-                    stud_info = {}
-
                     comp_id = kwargs.get('comp_id')
                     if comp_id:
                         stud_info = StudentManager.getMarks(student, comp_id)

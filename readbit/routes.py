@@ -196,6 +196,7 @@ def add_marks():
     if request.method == "POST" and 'class_select' in request.form:
         selected_class = request.form['class_select']
         student_list = iInstructor.viewClass(selected_class, module, comp_id=comp_id)
+        student_list = sorted(student_list, key=lambda k: k['name'])
 
         if 'submit2' not in request.form or csv_flag:
             if csv_flag:
